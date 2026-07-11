@@ -3,6 +3,7 @@
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { BrandLogo } from "@/components/brand/BrandLogo";
 import { TwitterConnect } from "@/components/connect/TwitterConnect";
 import { MetaMaskConnect } from "@/components/connect/MetaMaskConnect";
 
@@ -20,9 +21,7 @@ export function Navbar() {
     <header className="fixed inset-x-0 top-0 z-50 border-b border-terminal bg-black/90 backdrop-blur-sm">
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6">
         <Link href="/" className="group flex items-center gap-2 font-mono">
-          <span className="flex h-8 w-8 items-center justify-center border border-terminal bg-black text-xs font-bold text-terminal group-hover:bg-terminal group-hover:text-black transition-colors">
-            IPG
-          </span>
+          <BrandLogo size="sm" priority className="transition-opacity group-hover:opacity-90" />
           <span className="hidden text-sm font-bold uppercase tracking-wider text-terminal group-hover:text-[#00f0ff] transition-colors sm:block">
             Infinite Ponzi Glitch
           </span>

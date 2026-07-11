@@ -10,6 +10,7 @@ import type { LeaderboardEntry } from "@/types";
 import { GlitchText } from "@/components/effects/Terminal";
 import { BootSequence } from "@/components/effects/BootSequence";
 import { LiveFeedTicker } from "@/components/leaderboard/LiveFeedTicker";
+import { BrandLogo } from "@/components/brand/BrandLogo";
 
 function AnimatedNumber({ value }: { value: number }) {
   const count = useMotionValue(0);
@@ -62,6 +63,20 @@ export function HeroSection() {
 
       {/* Contenido principal — centrado */}
       <div className="relative mx-auto flex min-h-0 w-full max-w-6xl flex-1 flex-col items-center justify-center px-4 pb-2 pt-2 sm:px-6">
+        {/* Logo */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.85 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="mb-3 sm:mb-4"
+        >
+          <BrandLogo
+            size="xl"
+            priority
+            className="shadow-[0_0_40px_rgba(0,255,65,0.25)]"
+          />
+        </motion.div>
+
         {/* Badge superior */}
         <motion.div
           initial={{ opacity: 0, y: -8 }}

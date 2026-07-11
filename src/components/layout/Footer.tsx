@@ -1,15 +1,20 @@
+import { BrandLogo } from "@/components/brand/BrandLogo";
+
 export function Footer() {
   return (
     <footer id="docs" className="border-t border-terminal py-10 pb-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="flex flex-col gap-8 sm:flex-row sm:items-center sm:justify-between">
-          <div className="font-mono">
-            <p className="text-sm font-bold uppercase tracking-wider text-terminal">
-              Infinite Ponzi Glitch
-            </p>
-            <p className="mt-1 text-xs text-dim">
-              {">"} ATTENTION_FI :: ROBINHOOD_CHAIN [4663] :: MAINNET
-            </p>
+          <div className="flex items-center gap-3 font-mono">
+            <BrandLogo size="md" />
+            <div>
+              <p className="text-sm font-bold uppercase tracking-wider text-terminal">
+                Infinite Ponzi Glitch
+              </p>
+              <p className="mt-1 text-xs text-dim">
+                {">"} ATTENTION_FI :: ROBINHOOD_CHAIN [4663] :: MAINNET
+              </p>
+            </div>
           </div>
 
           <div className="flex flex-wrap gap-6 font-mono text-xs uppercase tracking-wider text-dim">
