@@ -1,4 +1,5 @@
 import { BrandLogo } from "@/components/brand/BrandLogo";
+import { SocialLinks } from "@/components/social/SocialLinks";
 
 export function Footer() {
   return (
@@ -17,7 +18,9 @@ export function Footer() {
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-6 font-mono text-xs uppercase tracking-wider text-dim">
+          <div className="flex flex-col gap-4 sm:items-end">
+            <SocialLinks />
+            <div className="flex flex-wrap gap-6 font-mono text-xs uppercase tracking-wider text-dim">
             <a href="#leaderboard" className="hover:text-terminal">
               RANK_MATRIX
             </a>
@@ -35,6 +38,7 @@ export function Footer() {
             >
               CHAIN_DOCS
             </a>
+            </div>
           </div>
         </div>
 

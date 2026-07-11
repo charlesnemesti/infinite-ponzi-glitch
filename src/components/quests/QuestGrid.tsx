@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useUser } from "@/hooks/useUser";
+import { LAUNCH_TWEET_URL, OFFICIAL_X_FOLLOW_URL, xMention } from "@/lib/social/config";
 import type { Quest } from "@/types";
 
 type QuestGridProps = {
@@ -35,6 +36,11 @@ function QuestIcon({ icon }: { icon: string }) {
       return <Wallet size={20} className={cls} />;
   }
 }
+
+const QUEST_LINKS: Record<string, { href: string; label: string } | undefined> = {
+  "follow-project": { href: OFFICIAL_X_FOLLOW_URL, label: "OPEN X" },
+  "retweet-launch": { href: LAUNCH_TWEET_URL, label: "VIEW PIN" },
+};
 
 const CATEGORY_STYLE = {
   social: "border-[#00f0ff]/30 hover:border-[#00f0ff]/60",
@@ -136,7 +142,18 @@ export function QuestGrid({ quests }: QuestGridProps) {
                   ) : quest.id === "invite-friend" ? (
                     <span className="text-[10px] text-dim">VIA REFERRAL</span>
                   ) : (
-                    <button
+                    <div className="flex flex-col items-end gap-1">
+                      {QUEST_LINKS[quest.id] && (
+                        <a
+                          href={QUEST_LINKS[quest.id]!.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-[9px] text-[#00f0ff] hover:underline"
+                        >
+                          {QUEST_LINKS[quest.id]!.label}
+                        </a>
+                      )}
+                      <button
                       type="button"
                       disabled={executing === quest.id}
                       onClick={() => handleExec(quest.id)}
@@ -145,6 +162,7 @@ export function QuestGrid({ quests }: QuestGridProps) {
                       {executing === quest.id ? <Loader2 size={12} className="animate-spin" /> : null}
                       EXEC
                     </button>
+                    </div>
                   )}
                 </div>
               </motion.div>

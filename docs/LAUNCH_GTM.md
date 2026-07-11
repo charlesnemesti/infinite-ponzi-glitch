@@ -2,7 +2,7 @@
 
 ## Pre-launch checklist
 
-- [ ] Reservar @infinite_ponzi_glitch en X
+- [ ] Cuenta oficial: [@Infinite_Ponzi](https://x.com/Infinite_Ponzi)
 - [ ] Crear Telegram: t.me/infinite_ponzi_glitch
 - [ ] Configurar `.env.local` (Twitter, Supabase, WalletConnect)
 - [ ] Ejecutar `supabase/schema.sql` en Supabase SQL Editor
@@ -65,7 +65,7 @@ Quest board live:
 
 ✓ Connect wallet — 500 XP
 ✓ Connect X — 1000 XP
-✓ Follow @infinite_ponzi_glitch — 750 XP
+✓ Follow @Infinite_Ponzi — 750 XP
 ✓ Retweet this thread — 1500 XP
 ✓ Invite a friend — 2000 XP (x5 mult)
 

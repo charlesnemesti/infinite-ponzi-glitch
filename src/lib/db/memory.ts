@@ -61,16 +61,16 @@ function getStore(): Store {
 
 function seedDemoUsers(store: Store) {
   const demos = [
-    { handle: "0xCobra_", name: "0xCobra", avatar: "C", score: 160526, delta: 12400 },
-    { handle: "xanonxbt", name: "xanon", avatar: "X", score: 116550, delta: 8900 },
-    { handle: "PackBagPoints", name: "TheHawk", avatar: "P", score: 48742, delta: 4200 },
-    { handle: "ARA_onX", name: "A•R•A", avatar: "A", score: 44233, delta: 3100 },
-    { handle: "Bend756", name: "Bendot", avatar: "B", score: 37905, delta: 2800 },
-    { handle: "idli08", name: "idli08", avatar: "I", score: 36007, delta: 1900 },
-    { handle: "Kne4", name: "Jim Kne", avatar: "K", score: 32550, delta: 1200 },
-    { handle: "Zz7_NFT", name: "Zz7", avatar: "Z", score: 27300, delta: 900 },
-    { handle: "Shin_kai67", name: "Shin Kai", avatar: "S", score: 27300, delta: 850 },
-    { handle: "just_armend", name: "Armend", avatar: "J", score: 21011, delta: 720 },
+    { handle: "glitch_prophet", name: "GLITCH_PROPHET", avatar: "G", score: 142800, delta: 11800, refs: 12 },
+    { handle: "ponzi_pilot_rh", name: "PonziPilot", avatar: "P", score: 108420, delta: 9200, refs: 8 },
+    { handle: "stack_overflow_x", name: "StackOverflow", avatar: "S", score: 67420, delta: 5100, refs: 5 },
+    { handle: "chainrunner4663", name: "ChainRunner", avatar: "R", score: 52100, delta: 3800, refs: 3 },
+    { handle: "memefi_saint", name: "MemeFiSaint", avatar: "M", score: 44880, delta: 2900, refs: 2 },
+    { handle: "node_hunter_ipg", name: "NodeHunter", avatar: "N", score: 39200, delta: 2100, refs: 1 },
+    { handle: "rank_ghost_0x", name: "RankGhost", avatar: "Ξ", score: 33100, delta: 1600, refs: 0 },
+    { handle: "xploit_king", name: "XploitKing", avatar: "X", score: 28750, delta: 1100, refs: 0 },
+    { handle: "zeroday_ape", name: "ZeroDayApe", avatar: "Z", score: 25400, delta: 890, refs: 0 },
+    { handle: "byte_bandit_rh", name: "ByteBandit", avatar: "B", score: 19880, delta: 620, refs: 0 },
   ];
 
   for (const d of demos) {

@@ -3,6 +3,15 @@
 import clsx from "clsx";
 import type { LeaderboardEntry } from "@/types";
 
+const FEED_ACTIONS = [
+  "invited node",
+  "retweeted pin",
+  "connected X",
+  "stacked XP",
+  "posted card",
+  "flash 3x",
+];
+
 type LiveFeedTickerProps = {
   entries: LeaderboardEntry[];
   pinned?: boolean;
@@ -22,15 +31,19 @@ export function LiveFeedTicker({ entries, pinned = false }: LiveFeedTickerProps)
       <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-black to-transparent" />
 
       <div className="flex animate-marquee gap-10 whitespace-nowrap font-mono text-xs">
-        {items.map((entry, i) => (
-          <span key={`${entry.handle}-${i}`} className="inline-flex items-center gap-2">
-            <span className="text-[#ff0080]">[SYNC]</span>
-            <span className="font-bold text-terminal">
-              +{entry.score.toLocaleString()}
+        {items.map((entry, i) => {
+          const action = FEED_ACTIONS[i % FEED_ACTIONS.length];
+          return (
+            <span key={`${entry.handle}-${i}`} className="inline-flex items-center gap-2">
+              <span className="text-[#ff0080]">[SYNC]</span>
+              <span className="text-dim">@{entry.handle}</span>
+              <span className="text-[#00f0ff]">{action}</span>
+              <span className="font-bold text-terminal">
+                {entry.score.toLocaleString()} XP
+              </span>
             </span>
-            <span className="text-dim">@{entry.handle}</span>
-          </span>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

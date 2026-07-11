@@ -1,13 +1,35 @@
+import {
+  OFFICIAL_X_FOLLOW_URL,
+  OFFICIAL_X_HANDLE,
+  OFFICIAL_X_URL,
+  xMention,
+} from "@/lib/social/config";
+
 const OFFICIAL_X_USER = process.env.TWITTER_OFFICIAL_USER_ID ?? "";
 const LAUNCH_TWEET_ID = process.env.TWITTER_LAUNCH_TWEET_ID ?? "";
 
 export type VerifyResult = { ok: boolean; unauthorized?: boolean };
 
+async function resolveOfficialUserId(accessToken: string): Promise<string | null> {
+  if (OFFICIAL_X_USER) return OFFICIAL_X_USER;
+
+  const res = await fetch(
+    `https://api.twitter.com/2/users/by/username/${OFFICIAL_X_HANDLE}?user.fields=id`,
+    { headers: { Authorization: `Bearer ${accessToken}` } },
+  );
+
+  if (!res.ok) return null;
+  const data = await res.json();
+  return data.data?.id ?? null;
+}
+
 export async function verifyFollowsOfficial(
   accessToken: string,
   userTwitterId: string,
 ): Promise<VerifyResult> {
-  if (!OFFICIAL_X_USER) {
+  const officialId = await resolveOfficialUserId(accessToken);
+
+  if (!officialId) {
     return { ok: process.env.NODE_ENV === "development" };
   }
 
@@ -21,7 +43,7 @@ export async function verifyFollowsOfficial(
 
   const data = await res.json();
   const ids = (data.data ?? []).map((u: { id: string }) => u.id);
-  return { ok: ids.includes(OFFICIAL_X_USER) };
+  return { ok: ids.includes(officialId) };
 }
 
 export async function verifyRetweetedLaunch(
@@ -60,3 +82,5 @@ export async function verifyRetweetedLaunch(
   const ok = (data.data ?? []).some((u: { id: string }) => u.id === userTwitterId);
   return { ok };
 }
+
+export { OFFICIAL_X_URL, OFFICIAL_X_FOLLOW_URL, OFFICIAL_X_HANDLE, xMention };

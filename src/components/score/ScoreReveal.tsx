@@ -6,6 +6,7 @@ import type { TwitterSession } from "@/types";
 import { TwitterConnect } from "@/components/connect/TwitterConnect";
 import { GlitchText, TerminalFrame } from "@/components/effects/Terminal";
 import { useUser } from "@/hooks/useUser";
+import { xMention } from "@/lib/social/config";
 
 export function ScoreReveal() {
   const { user } = useUser();
@@ -27,7 +28,7 @@ export function ScoreReveal() {
     const base = window.location.origin;
     const ogUrl = `${base}/api/og/score?username=${encodeURIComponent(username)}&score=${score}&rank=${rank}&total=271&ref=${refCode}`;
     const text = encodeURIComponent(
-      `> ATTENTION_SCORE: ${score.toLocaleString()} XP\n> RANK #${rank} on @Infinite_Ponzi_Glitch\n\nCan you beat me? 👇\n${base}?ref=${refCode}`,
+      `> ATTENTION_SCORE: ${score.toLocaleString()} XP\n> RANK #${rank} on ${xMention()}\n\nCan you beat me? 👇\n${base}?ref=${refCode}`,
     );
     window.open(`https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(ogUrl)}`, "_blank");
   };

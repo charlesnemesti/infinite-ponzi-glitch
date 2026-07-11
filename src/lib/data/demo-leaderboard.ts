@@ -1,0 +1,145 @@
+import type { LeaderboardEntry } from "@/types";
+import { xMention } from "@/lib/social/config";
+
+export const DEMO_DISCLAIMER =
+  "DEMO_DATA — Simulated rank feed for preview only. Real contest starts at $GLITCH TGE on Robinhood Chain mainnet [4663].";
+
+export const DEMO_LEADERBOARD: LeaderboardEntry[] = [
+  {
+    rank: 1,
+    handle: "glitch_prophet",
+    displayName: "GLITCH_PROPHET",
+    avatar: "G",
+    score: 142800,
+    posts: 4,
+    reach: 2200,
+    supporters: 41,
+    delta24h: 11800,
+    referrals: 12,
+  },
+  {
+    rank: 2,
+    handle: "ponzi_pilot_rh",
+    displayName: "PonziPilot",
+    avatar: "P",
+    score: 108420,
+    posts: 2,
+    reach: 980,
+    supporters: 28,
+    delta24h: 9200,
+    referrals: 8,
+  },
+  {
+    rank: 3,
+    handle: "stack_overflow_x",
+    displayName: "StackOverflow",
+    avatar: "S",
+    score: 67420,
+    posts: 3,
+    reach: 540,
+    supporters: 19,
+    delta24h: 5100,
+    referrals: 5,
+  },
+  {
+    rank: 4,
+    handle: "chainrunner4663",
+    displayName: "ChainRunner",
+    avatar: "R",
+    score: 52100,
+    posts: 1,
+    reach: 410,
+    supporters: 14,
+    delta24h: 3800,
+    referrals: 3,
+  },
+  {
+    rank: 5,
+    handle: "memefi_saint",
+    displayName: "MemeFiSaint",
+    avatar: "M",
+    score: 44880,
+    posts: 2,
+    reach: 290,
+    supporters: 11,
+    delta24h: 2900,
+    referrals: 2,
+  },
+  {
+    rank: 6,
+    handle: "node_hunter_ipg",
+    displayName: "NodeHunter",
+    avatar: "N",
+    score: 39200,
+    posts: 0,
+    reach: 120,
+    supporters: 7,
+    delta24h: 2100,
+    referrals: 1,
+  },
+  {
+    rank: 7,
+    handle: "rank_ghost_0x",
+    displayName: "RankGhost",
+    avatar: "Ξ",
+    score: 33100,
+    posts: 1,
+    reach: 88,
+    supporters: 5,
+    delta24h: 1600,
+  },
+  {
+    rank: 8,
+    handle: "xploit_king",
+    displayName: "XploitKing",
+    avatar: "X",
+    score: 28750,
+    posts: 0,
+    reach: 0,
+    supporters: 3,
+    delta24h: 1100,
+  },
+  {
+    rank: 9,
+    handle: "zeroday_ape",
+    displayName: "ZeroDayApe",
+    avatar: "Z",
+    score: 25400,
+    posts: 1,
+    reach: 45,
+    supporters: 2,
+    delta24h: 890,
+  },
+  {
+    rank: 10,
+    handle: "byte_bandit_rh",
+    displayName: "ByteBandit",
+    avatar: "B",
+    score: 19880,
+    posts: 0,
+    reach: 22,
+    supporters: 1,
+    delta24h: 620,
+  },
+];
+
+export type DemoRankAction = {
+  label: string;
+  xp: number;
+  tone: "up" | "down" | "neutral";
+  color: string;
+};
+
+export const DEMO_RANK_ACTIONS: DemoRankAction[] = [
+  { label: "Invited a friend", xp: 2000, tone: "up", color: "#ff0080" },
+  { label: "Retweeted launch pin", xp: 1500, tone: "up", color: "#00f0ff" },
+  { label: "Connected X account", xp: 1000, tone: "up", color: "#00ff41" },
+  { label: `Followed ${xMention()}`, xp: 750, tone: "up", color: "#00ff41" },
+  { label: "Connected wallet [4663]", xp: 500, tone: "up", color: "#00ff41" },
+  { label: "Posted score card to X", xp: 420, tone: "up", color: "#00f0ff" },
+  { label: "Flash Glitch Event 3x XP", xp: 1800, tone: "up", color: "#ffff00" },
+  { label: "Squad daily quest complete", xp: 1200, tone: "up", color: "#ff0080" },
+  { label: "Published opinion thread", xp: 5000, tone: "up", color: "#00f0ff" },
+  { label: "Overtaken by rival node", xp: 0, tone: "down", color: "#ff0080" },
+  { label: "Rank decay — inactivity", xp: -320, tone: "down", color: "#888" },
+];
