@@ -1,6 +1,9 @@
 /** Official project X account — https://x.com/Infinite_Ponzi */
 export const OFFICIAL_X_HANDLE =
   process.env.NEXT_PUBLIC_OFFICIAL_X_HANDLE ?? "Infinite_Ponzi";
+/** Numeric user ID for @Infinite_Ponzi (used for follow quest verification) */
+export const OFFICIAL_X_USER_ID =
+  process.env.TWITTER_OFFICIAL_USER_ID ?? "2071249032547119104";
 export const OFFICIAL_X_URL = `https://x.com/${OFFICIAL_X_HANDLE}`;
 export const OFFICIAL_X_FOLLOW_URL = `https://x.com/intent/follow?screen_name=${OFFICIAL_X_HANDLE}`;
 

@@ -1,4 +1,4 @@
-import { OFFICIAL_X_HANDLE } from "@/lib/social/config";
+import { OFFICIAL_X_HANDLE, OFFICIAL_X_USER_ID } from "@/lib/social/config";
 
 export function isTwitterOAuthConfigured(): boolean {
   return Boolean(
@@ -13,6 +13,7 @@ export function isTwitterQuestsConfigured(): boolean {
   const hasLaunchTweet = Boolean(process.env.TWITTER_LAUNCH_TWEET_ID?.trim());
   const hasOfficial =
     Boolean(process.env.TWITTER_OFFICIAL_USER_ID?.trim()) ||
+    Boolean(OFFICIAL_X_USER_ID) ||
     Boolean(process.env.NEXT_PUBLIC_OFFICIAL_X_HANDLE?.trim()) ||
     Boolean(OFFICIAL_X_HANDLE) ||
     hasLaunchTweet;

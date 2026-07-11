@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "verify:twitter": "node scripts/verify-twitter.mjs",
+    "resolve:official-id": "node scripts/resolve-official-user-id.mjs",
     "build:banner": "node scripts/build-banner.mjs"
   },
   "dependencies": {

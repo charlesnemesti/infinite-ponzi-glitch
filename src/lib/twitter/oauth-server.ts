@@ -24,6 +24,8 @@ export async function getAppAccessToken(): Promise<string | null> {
     },
     body: new URLSearchParams({
       grant_type: "client_credentials",
+      client_id: clientId,
+      client_secret: clientSecret,
       scope: "tweet.read users.read follows.read",
     }),
   });

@@ -2,11 +2,12 @@ import {
   OFFICIAL_X_FOLLOW_URL,
   OFFICIAL_X_HANDLE,
   OFFICIAL_X_URL,
+  OFFICIAL_X_USER_ID,
   xMention,
 } from "@/lib/social/config";
 import { getAppAccessToken } from "@/lib/twitter/oauth-server";
 
-const OFFICIAL_X_USER = process.env.TWITTER_OFFICIAL_USER_ID ?? "";
+const OFFICIAL_X_USER = process.env.TWITTER_OFFICIAL_USER_ID ?? OFFICIAL_X_USER_ID;
 const LAUNCH_TWEET_ID = process.env.TWITTER_LAUNCH_TWEET_ID ?? "";
 
 export type VerifyResult = { ok: boolean; unauthorized?: boolean; reason?: string };
@@ -38,18 +39,20 @@ async function lookupFromLaunchTweet(token: string): Promise<string | null> {
 async function resolveOfficialUserId(userAccessToken?: string): Promise<string | null> {
   if (OFFICIAL_X_USER) return OFFICIAL_X_USER;
 
+  // User token + tweet.read can read public launch tweet author (works on free tier)
+  if (userAccessToken) {
+    const fromTweet = await lookupFromLaunchTweet(userAccessToken);
+    if (fromTweet) return fromTweet;
+    const fromUsername = await lookupUsername(userAccessToken);
+    if (fromUsername) return fromUsername;
+  }
+
   const appToken = await getAppAccessToken();
   if (appToken) {
     const fromUsername = await lookupUsername(appToken);
     if (fromUsername) return fromUsername;
-
     const fromTweet = await lookupFromLaunchTweet(appToken);
     if (fromTweet) return fromTweet;
-  }
-
-  if (userAccessToken) {
-    const fromUsername = await lookupUsername(userAccessToken);
-    if (fromUsername) return fromUsername;
   }
 
   return null;
