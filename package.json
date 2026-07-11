@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "verify:twitter": "node scripts/verify-twitter.mjs"
+    "verify:twitter": "node scripts/verify-twitter.mjs",
+    "build:banner": "node scripts/build-banner.mjs"
   },
   "dependencies": {
     "@rainbow-me/rainbowkit": "^2.2.11",
