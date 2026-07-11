@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { RainbowKitProvider, darkTheme } from "@rainbow-me/rainbowkit";
 import { WagmiProvider } from "wagmi";
 import { wagmiConfig } from "@/lib/wagmi/config";
+import { UserProvider } from "@/hooks/useUser";
 import { useState, type ReactNode } from "react";
 
 export function Web3Provider({ children }: { children: ReactNode }) {
@@ -20,7 +21,7 @@ export function Web3Provider({ children }: { children: ReactNode }) {
             borderRadius: "medium",
           })}
         >
-          {children}
+          <UserProvider>{children}</UserProvider>
         </RainbowKitProvider>
       </QueryClientProvider>
     </WagmiProvider>

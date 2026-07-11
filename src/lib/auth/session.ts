@@ -97,6 +97,8 @@ export async function getValidAccessTokenWithRefresh(): Promise<{
   }
 }
 
+export const LINK_WALLET_COOKIE = "ipg_link_wallet";
+
 export {
   SESSION_COOKIE,
   ACCESS_TOKEN_COOKIE,

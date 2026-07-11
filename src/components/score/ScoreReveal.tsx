@@ -4,12 +4,13 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import type { TwitterSession } from "@/types";
 import { TwitterConnect } from "@/components/connect/TwitterConnect";
+import { LinkStatusPanel } from "@/components/connect/LinkStatusPanel";
 import { GlitchText, TerminalFrame } from "@/components/effects/Terminal";
 import { useUser } from "@/hooks/useUser";
 import { xMention } from "@/lib/social/config";
 
 export function ScoreReveal() {
-  const { user } = useUser();
+  const { user, isLinked, walletConnected, twitterConnected } = useUser();
   const [session, setSession] = useState<TwitterSession | null>(null);
   const [revealed, setRevealed] = useState(false);
 
@@ -76,8 +77,9 @@ export function ScoreReveal() {
                 )}
               </div>
             ) : (
-              <div className="mt-6">
+              <div className="mt-6 space-y-4">
                 <TwitterConnect />
+                {(walletConnected || twitterConnected) && <LinkStatusPanel />}
               </div>
             )}
           </div>

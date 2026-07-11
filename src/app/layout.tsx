@@ -4,7 +4,7 @@ import { Web3Provider } from "@/components/providers/Web3Provider";
 import "./globals.css";
 
 const APP_URL =
-  process.env.NEXT_PUBLIC_APP_URL ?? "https://infinite-ponzi-glitch.vercel.app";
+  process.env.NEXT_PUBLIC_APP_URL ?? "https://www.infiniteponziglitch.fun";
 
 const shareTech = Share_Tech_Mono({
   variable: "--font-share-tech",

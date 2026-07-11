@@ -133,10 +133,18 @@ export const memoryDb = {
     referred_by_code?: string;
   }): Promise<DbUser> {
     const store = getStore();
-    let userId =
-      (data.wallet && store.usersByWallet.get(data.wallet.toLowerCase())) ||
-      (data.twitter_id && store.usersByTwitter.get(data.twitter_id));
+    const walletUserId = data.wallet
+      ? store.usersByWallet.get(data.wallet.toLowerCase())
+      : undefined;
+    const twitterUserId = data.twitter_id
+      ? store.usersByTwitter.get(data.twitter_id)
+      : undefined;
 
+    if (walletUserId && twitterUserId && walletUserId !== twitterUserId) {
+      throw new Error("TWITTER_WALLET_CONFLICT");
+    }
+
+    const userId = walletUserId ?? twitterUserId;
     let user = userId ? store.users.get(userId) : undefined;
 
     if (!user) {

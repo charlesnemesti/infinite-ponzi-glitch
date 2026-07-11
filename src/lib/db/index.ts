@@ -23,11 +23,18 @@ export const db = {
     if (useMemory()) return memoryDb.upsertUser(data);
 
     const sb = getSupabase()!;
-    const { data: existing } = data.wallet
+    const { data: walletUser } = data.wallet
       ? await sb.from("users").select("*").eq("wallet_address", data.wallet.toLowerCase()).maybeSingle()
-      : data.twitter_id
-        ? await sb.from("users").select("*").eq("twitter_id", data.twitter_id).maybeSingle()
-        : { data: null };
+      : { data: null };
+    const { data: twitterUser } = data.twitter_id
+      ? await sb.from("users").select("*").eq("twitter_id", data.twitter_id).maybeSingle()
+      : { data: null };
+
+    if (walletUser && twitterUser && walletUser.id !== twitterUser.id) {
+      throw new Error("TWITTER_WALLET_CONFLICT");
+    }
+
+    const existing = walletUser ?? twitterUser;
 
     let referredBy: string | null = null;
     if (data.referred_by_code) {
@@ -50,7 +57,7 @@ export const db = {
           profile_image_url: data.profile_image_url ?? existing.profile_image_url,
           updated_at: new Date().toISOString(),
         })
-        .eq("id", existing.id)
+        .eq("id", existing!.id)
         .select()
         .single();
       if (error) throw error;

@@ -1,8 +1,22 @@
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { allowTwitterDevAuth } from "@/lib/twitter/config";
+import {
+  ACCESS_TOKEN_COOKIE,
+  LINK_WALLET_COOKIE,
+  SESSION_COOKIE,
+} from "@/lib/auth/session";
+import { LinkConflictError, linkWalletAccount } from "@/lib/user/link-account";
 
-const SESSION_COOKIE = "twitter_session";
-const TOKEN_COOKIE = "twitter_access_token";
+function cookieOptions(maxAge: number) {
+  return {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax" as const,
+    maxAge,
+    path: "/",
+  };
+}
 
 export async function GET() {
   if (!allowTwitterDevAuth()) {
@@ -10,6 +24,8 @@ export async function GET() {
   }
 
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+  const cookieStore = await cookies();
+  const pendingWallet = cookieStore.get(LINK_WALLET_COOKIE)?.value;
 
   const session = {
     connected: true,
@@ -20,23 +36,31 @@ export async function GET() {
     score: 42069,
   };
 
-  const response = NextResponse.redirect(`${baseUrl}/?twitter=connected&dev=1`);
+  let redirectUrl = `${baseUrl}/?twitter=connected&dev=1`;
 
-  response.cookies.set(SESSION_COOKIE, JSON.stringify(session), {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    maxAge: 60 * 60 * 24 * 30,
-    path: "/",
-  });
+  if (pendingWallet && /^0x[a-fA-F0-9]{40}$/.test(pendingWallet)) {
+    try {
+      await linkWalletAccount(pendingWallet, {
+        twitter: {
+          twitter_id: session.twitter_id,
+          twitter_username: session.username,
+          twitter_name: session.name,
+          profile_image_url: undefined,
+        },
+      });
+      redirectUrl = `${baseUrl}/?twitter=connected&dev=1&linked=1`;
+    } catch (e) {
+      if (e instanceof LinkConflictError) {
+        redirectUrl = `${baseUrl}/?twitter=conflict&dev=1`;
+      }
+    }
+  }
 
-  response.cookies.set(TOKEN_COOKIE, "dev_access_token", {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    maxAge: 60 * 60 * 24 * 30,
-    path: "/",
-  });
+  const response = NextResponse.redirect(redirectUrl);
+
+  response.cookies.set(SESSION_COOKIE, JSON.stringify(session), cookieOptions(60 * 60 * 24 * 30));
+  response.cookies.set(ACCESS_TOKEN_COOKIE, "dev_access_token", cookieOptions(60 * 60 * 24 * 30));
+  response.cookies.delete(LINK_WALLET_COOKIE);
 
   return response;
 }

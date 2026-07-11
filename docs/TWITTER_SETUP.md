@@ -13,7 +13,7 @@ Guía para conectar OAuth 2.0 real en Infinite Ponzi Glitch.
    - **Callback URLs** (añade ambas si usas local + prod):
      ```
      http://localhost:3000/api/auth/twitter/callback
-     https://TU-DOMINIO.com/api/auth/twitter/callback
+     https://www.infiniteponziglitch.fun/api/auth/twitter/callback
      ```
    - **Website URL:** `http://localhost:3000` o tu dominio
 5. Guarda y copia **OAuth 2.0 Client ID** y **Client Secret**.
@@ -67,13 +67,17 @@ Respuesta esperada con OAuth real:
 }
 ```
 
-## 5. Probar flujo
+## 5. Probar flujo wallet ↔ X
 
 1. `npm run dev` (reinicia tras cambiar `.env.local`)
-2. Click **CONNECT_X** → debe ir a `twitter.com/i/oauth2/authorize`
-3. Autoriza → vuelves con `?twitter=connected` y tu @username
-4. Conecta MetaMask → sync automático
-5. Sigue la cuenta oficial + retweetea el pin → **EXEC** en quests
+2. Conecta **MetaMask** primero (Robinhood Chain, id 4663)
+3. Click **CONNECT_X** → OAuth en `twitter.com/i/oauth2/authorize`
+   - Si ya tienes wallet conectada, la dirección se guarda en cookie y se vincula automáticamente al volver
+4. Autoriza → vuelves con `?twitter=connected&linked=1`
+5. El panel **identity_link_status** debe mostrar WALLET + X_ACCOUNT + LINKED `[OK]`
+6. Sigue @Infinite_Ponzi + retweetea el pin → **EXEC** en quests
+
+Orden alternativo: conectar X primero y wallet después — el sync se dispara al conectar MetaMask.
 
 ## 6. Producción (Vercel)
 

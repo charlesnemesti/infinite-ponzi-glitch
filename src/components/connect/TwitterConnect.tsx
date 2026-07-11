@@ -2,10 +2,13 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { useAccount } from "wagmi";
 import type { TwitterSession } from "@/types";
+import { useUser } from "@/hooks/useUser";
 
 type TwitterConnectProps = {
   compact?: boolean;
+  onConnected?: () => void;
 };
 
 const ERROR_MESSAGES: Record<string, string> = {
@@ -13,10 +16,13 @@ const ERROR_MESSAGES: Record<string, string> = {
   missing: "Missing auth code",
   invalid_state: "Invalid session — try again",
   failed: "X auth failed — check credentials",
-  not_configured: "X OAuth not configured — see docs/TWITTER_SETUP.md",
+  not_configured: "X OAuth not configured — add keys to .env.local",
+  conflict: "X account already linked to another wallet",
 };
 
-export function TwitterConnect({ compact = false }: TwitterConnectProps) {
+export function TwitterConnect({ compact = false, onConnected }: TwitterConnectProps) {
+  const { address } = useAccount();
+  const { sync, refreshTwitterSession } = useUser();
   const [session, setSession] = useState<TwitterSession | null>(null);
   const [loading, setLoading] = useState(true);
   const [connecting, setConnecting] = useState(false);
@@ -24,11 +30,11 @@ export function TwitterConnect({ compact = false }: TwitterConnectProps) {
   const [notReady, setNotReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const loadSession = () => {
-    fetch("/api/auth/session")
-      .then((res) => res.json())
-      .then((data: TwitterSession) => setSession(data))
-      .finally(() => setLoading(false));
+  const loadSession = async () => {
+    const data = await refreshTwitterSession();
+    setSession(data);
+    setLoading(false);
+    return data;
   };
 
   useEffect(() => {
@@ -39,24 +45,32 @@ export function TwitterConnect({ compact = false }: TwitterConnectProps) {
         setDevMode(Boolean(d.devFallback));
         setNotReady(!d.ready && !d.devFallback);
       });
-  }, []);
+  }, [refreshTwitterSession]);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const twitterStatus = params.get("twitter");
     const detail = params.get("detail");
     if (twitterStatus && ERROR_MESSAGES[twitterStatus]) {
-      setError(detail ? `${ERROR_MESSAGES[twitterStatus]}: ${decodeURIComponent(detail)}` : ERROR_MESSAGES[twitterStatus]);
+      setError(
+        detail
+          ? `${ERROR_MESSAGES[twitterStatus]}: ${decodeURIComponent(detail)}`
+          : ERROR_MESSAGES[twitterStatus],
+      );
     } else if (twitterStatus === "connected") {
       setError(null);
-      loadSession();
+      loadSession().then(() => {
+        onConnected?.();
+        sync();
+      });
     }
-  }, []);
+  }, [onConnected, sync, refreshTwitterSession]);
 
   const handleConnect = () => {
     setConnecting(true);
     setError(null);
-    window.location.href = "/api/auth/twitter";
+    const walletParam = address ? `?wallet=${encodeURIComponent(address)}` : "";
+    window.location.href = `/api/auth/twitter${walletParam}`;
   };
 
   const handleDisconnect = async () => {
@@ -98,9 +112,7 @@ export function TwitterConnect({ compact = false }: TwitterConnectProps) {
             </button>
           )}
         </div>
-        {devMode && (
-          <span className="text-[9px] text-dim">dev_x_session</span>
-        )}
+        {devMode && <span className="text-[9px] text-dim">dev_x_session</span>}
       </div>
     );
   }
@@ -116,15 +128,18 @@ export function TwitterConnect({ compact = false }: TwitterConnectProps) {
         <span>𝕏</span>
         {connecting ? "LINKING..." : compact ? "LINK_X" : "CONNECT_X"}
       </button>
+      {address && !compact && (
+        <span className="text-[9px] text-dim">wallet will link on auth</span>
+      )}
       {error && (
-        <span className="max-w-[180px] text-right text-[9px] text-[#ff0080]">{error}</span>
+        <span className="max-w-[200px] text-right text-[9px] text-[#ff0080]">{error}</span>
       )}
       {devMode && !error && (
         <span className="text-[9px] text-dim">dev mode (no X API keys)</span>
       )}
       {notReady && !error && (
-        <span className="max-w-[180px] text-right text-[9px] text-dim">
-          Fill .env.local — npm run verify:twitter
+        <span className="max-w-[200px] text-right text-[9px] text-dim">
+          Add TWITTER_CLIENT_ID + SECRET to .env.local
         </span>
       )}
     </div>
