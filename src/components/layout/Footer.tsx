@@ -1,5 +1,6 @@
 import { BrandLogo } from "@/components/brand/BrandLogo";
 import { SocialLinks } from "@/components/social/SocialLinks";
+import { ContractAddressBar } from "@/components/token/ContractAddressBar";
 
 export function Footer() {
   return (
@@ -19,6 +20,7 @@ export function Footer() {
           </div>
 
           <div className="flex flex-col gap-4 sm:items-end">
+            <ContractAddressBar variant="footer" />
             <SocialLinks />
             <div className="flex flex-wrap gap-6 font-mono text-xs uppercase tracking-wider text-dim">
             <a href="#leaderboard" className="hover:text-terminal">

@@ -11,6 +11,7 @@ import { GlitchText } from "@/components/effects/Terminal";
 import { BootSequence } from "@/components/effects/BootSequence";
 import { LiveFeedTicker } from "@/components/leaderboard/LiveFeedTicker";
 import { BrandLogo } from "@/components/brand/BrandLogo";
+import { ContractAddressBar } from "@/components/token/ContractAddressBar";
 
 function AnimatedNumber({ value }: { value: number }) {
   const count = useMotionValue(0);
@@ -90,6 +91,15 @@ export function HeroSection() {
           <span className="font-mono text-[10px] uppercase tracking-widest text-dim">
             chain_4663 · mainnet
           </span>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: -4 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+          className="mb-4 sm:mb-5"
+        >
+          <ContractAddressBar variant="hero" />
         </motion.div>
 
         {/* Top 3 flanking — solo desktop */}

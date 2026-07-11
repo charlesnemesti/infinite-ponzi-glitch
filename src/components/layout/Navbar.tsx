@@ -7,6 +7,7 @@ import { BrandLogo } from "@/components/brand/BrandLogo";
 import { TwitterConnect } from "@/components/connect/TwitterConnect";
 import { MetaMaskConnect } from "@/components/connect/MetaMaskConnect";
 import { SocialLinks } from "@/components/social/SocialLinks";
+import { ContractAddressBar } from "@/components/token/ContractAddressBar";
 
 const NAV_ITEMS = [
   { label: "RANK_MATRIX", href: "#leaderboard" },
@@ -42,6 +43,7 @@ export function Navbar() {
         </nav>
 
         <div className="hidden items-center gap-2 lg:gap-3 md:flex">
+          <ContractAddressBar variant="navbar" />
           <SocialLinks compact />
           <TwitterConnect compact />
           <MetaMaskConnect compact />
@@ -71,6 +73,7 @@ export function Navbar() {
               </a>
             ))}
             <div className="mt-2 flex flex-col gap-2 border-t border-terminal pt-4">
+              <ContractAddressBar variant="hero" />
               <SocialLinks />
               <TwitterConnect />
               <MetaMaskConnect />
