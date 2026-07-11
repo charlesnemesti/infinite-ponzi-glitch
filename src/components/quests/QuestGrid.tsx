@@ -42,6 +42,12 @@ const QUEST_LINKS: Record<string, { href: string; label: string } | undefined> =
   "retweet-launch": { href: LAUNCH_TWEET_URL, label: "VIEW PIN" },
 };
 
+const FOLLOW_INTENT_KEY = "ipg_follow_intent_at";
+
+function markFollowIntent() {
+  sessionStorage.setItem(FOLLOW_INTENT_KEY, String(Date.now()));
+}
+
 const CATEGORY_STYLE = {
   social: "border-[#00f0ff]/30 hover:border-[#00f0ff]/60",
   onchain: "border-terminal hover:border-terminal",
@@ -153,6 +159,7 @@ export function QuestGrid({ quests }: QuestGridProps) {
                           href={QUEST_LINKS[quest.id]!.href}
                           target="_blank"
                           rel="noopener noreferrer"
+                          onClick={quest.id === "follow-project" ? markFollowIntent : undefined}
                           className="text-[9px] text-[#00f0ff] hover:underline"
                         >
                           {QUEST_LINKS[quest.id]!.label}

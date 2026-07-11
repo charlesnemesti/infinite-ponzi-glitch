@@ -12,6 +12,88 @@ const LAUNCH_TWEET_ID = process.env.TWITTER_LAUNCH_TWEET_ID ?? "";
 
 export type VerifyResult = { ok: boolean; unauthorized?: boolean; reason?: string };
 
+export type FollowVerifyOptions = { followIntentAt?: number };
+
+const PAID_TIER_BLOCKED = new Set([402, 403]);
+const FOLLOW_INTENT_MIN_MS = 10_000;
+const FOLLOW_INTENT_MAX_MS = 30 * 60_000;
+
+function followHonorEnabled(): boolean {
+  return process.env.TWITTER_FOLLOW_HONOR_VERIFY !== "false";
+}
+
+function verifyFollowHonor(followIntentAt?: number): VerifyResult {
+  if (!followHonorEnabled()) {
+    return {
+      ok: false,
+      reason: "follow verify needs X API Basic ($200/mo) — set TWITTER_FOLLOW_HONOR_VERIFY=true for free tier",
+    };
+  }
+
+  if (!followIntentAt) {
+    return {
+      ok: false,
+      reason: "click OPEN X, follow @Infinite_Ponzi, wait 10s, then EXEC",
+    };
+  }
+
+  const age = Date.now() - followIntentAt;
+  if (age < FOLLOW_INTENT_MIN_MS) {
+    return { ok: false, reason: "wait 10s after opening X, then retry EXEC" };
+  }
+  if (age > FOLLOW_INTENT_MAX_MS) {
+    return { ok: false, reason: "click OPEN X again, follow @Infinite_Ponzi, then EXEC" };
+  }
+
+  return { ok: true };
+}
+
+async function fetchUserTimeline(
+  accessToken: string,
+  userTwitterId: string,
+): Promise<{ ok: true; tweets: unknown[] } | VerifyResult> {
+  const timelineUrl = new URL(`https://api.twitter.com/2/users/${userTwitterId}/tweets`);
+  timelineUrl.searchParams.set("max_results", "100");
+  timelineUrl.searchParams.set("tweet.fields", "referenced_tweets,text");
+
+  const res = await fetch(timelineUrl, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+
+  if (res.status === 401) return { ok: false, unauthorized: true };
+  if (!res.ok) return { ok: false, reason: `timeline lookup failed (${res.status})` };
+
+  const data = await res.json();
+  return { ok: true, tweets: data.data ?? [] };
+}
+
+async function userEngagedWithOfficial(
+  accessToken: string,
+  userTwitterId: string,
+): Promise<VerifyResult> {
+  const timeline = await fetchUserTimeline(accessToken, userTwitterId);
+  if (!("tweets" in timeline)) return timeline;
+
+  const mention = `@${OFFICIAL_X_HANDLE.toLowerCase()}`;
+  const ok = timeline.tweets.some((raw) => {
+    const t = raw as {
+      text?: string;
+      referenced_tweets?: { type: string; id: string }[];
+    };
+    if (t.text?.toLowerCase().includes(mention)) return true;
+    return t.referenced_tweets?.some(
+      (r) =>
+        (r.type === "retweeted" && r.id === LAUNCH_TWEET_ID) ||
+        (r.type === "replied_to" && r.id === LAUNCH_TWEET_ID),
+    );
+  });
+
+  return {
+    ok,
+    reason: ok ? undefined : `follow @${OFFICIAL_X_HANDLE} first`,
+  };
+}
+
 async function lookupUsername(token: string): Promise<string | null> {
   const res = await fetch(
     `https://api.twitter.com/2/users/by/username/${OFFICIAL_X_HANDLE}?user.fields=id`,
@@ -61,6 +143,7 @@ async function resolveOfficialUserId(userAccessToken?: string): Promise<string |
 export async function verifyFollowsOfficial(
   accessToken: string,
   userTwitterId: string,
+  options?: FollowVerifyOptions,
 ): Promise<VerifyResult> {
   const officialId = await resolveOfficialUserId(accessToken);
 
@@ -80,38 +163,39 @@ export async function verifyFollowsOfficial(
   });
 
   if (res.status === 401) return { ok: false, unauthorized: true };
-  if (!res.ok) return { ok: false, reason: `following lookup failed (${res.status})` };
 
-  const data = await res.json();
-  const ids = (data.data ?? []).map((u: { id: string }) => u.id);
-  return {
-    ok: ids.includes(officialId),
-    reason: ids.includes(officialId) ? undefined : `follow @${OFFICIAL_X_HANDLE} first`,
-  };
+  if (res.ok) {
+    const data = await res.json();
+    const ids = (data.data ?? []).map((u: { id: string }) => u.id);
+    return {
+      ok: ids.includes(officialId),
+      reason: ids.includes(officialId) ? undefined : `follow @${OFFICIAL_X_HANDLE} first`,
+    };
+  }
+
+  // X free tier returns 402/403 for follows lookup — use engagement or honor verify
+  if (PAID_TIER_BLOCKED.has(res.status)) {
+    const engagement = await userEngagedWithOfficial(accessToken, userTwitterId);
+    if (engagement.ok || engagement.unauthorized) return engagement;
+    return verifyFollowHonor(options?.followIntentAt);
+  }
+
+  return { ok: false, reason: `following lookup failed (${res.status})` };
 }
 
 async function userRetweetedFromTimeline(
   accessToken: string,
   userTwitterId: string,
 ): Promise<VerifyResult> {
-  const timelineUrl = new URL(`https://api.twitter.com/2/users/${userTwitterId}/tweets`);
-  timelineUrl.searchParams.set("max_results", "100");
-  timelineUrl.searchParams.set("tweet.fields", "referenced_tweets");
+  const timeline = await fetchUserTimeline(accessToken, userTwitterId);
+  if (!("tweets" in timeline)) return timeline;
 
-  const tlRes = await fetch(timelineUrl, {
-    headers: { Authorization: `Bearer ${accessToken}` },
+  const ok = timeline.tweets.some((raw) => {
+    const t = raw as { referenced_tweets?: { type: string; id: string }[] };
+    return t.referenced_tweets?.some(
+      (r) => r.type === "retweeted" && r.id === LAUNCH_TWEET_ID,
+    );
   });
-
-  if (tlRes.status === 401) return { ok: false, unauthorized: true };
-  if (!tlRes.ok) return { ok: false, reason: `timeline lookup failed (${tlRes.status})` };
-
-  const tl = await tlRes.json();
-  const ok = (tl.data ?? []).some(
-    (t: { referenced_tweets?: { type: string; id: string }[] }) =>
-      t.referenced_tweets?.some(
-        (r) => r.type === "retweeted" && r.id === LAUNCH_TWEET_ID,
-      ),
-  );
 
   return {
     ok,

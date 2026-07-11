@@ -103,12 +103,26 @@ export function UserProvider({ children }: { children: ReactNode }) {
     if (ref) fetch(`/api/referral/track?ref=${encodeURIComponent(ref)}`);
   }, []);
 
+const FOLLOW_INTENT_KEY = "ipg_follow_intent_at";
+
   const completeQuest = async (questId: string) => {
     if (!address) return { ok: false, error: "Connect wallet first" };
+
+    if (questId === "follow-project" && typeof window !== "undefined") {
+      if (!sessionStorage.getItem(FOLLOW_INTENT_KEY)) {
+        sessionStorage.setItem(FOLLOW_INTENT_KEY, String(Date.now()));
+      }
+    }
+
+    const followIntentAt =
+      questId === "follow-project" && typeof window !== "undefined"
+        ? Number(sessionStorage.getItem(FOLLOW_INTENT_KEY)) || undefined
+        : undefined;
+
     const res = await fetch(`/api/quests/${questId}/complete`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ wallet: address }),
+      body: JSON.stringify({ wallet: address, followIntentAt }),
     });
     const data = await res.json();
     if (data.success) {

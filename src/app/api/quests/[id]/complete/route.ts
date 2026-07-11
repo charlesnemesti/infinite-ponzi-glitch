@@ -117,8 +117,12 @@ export async function POST(
           return NextResponse.json({ error: "quest verification not configured" }, { status: 503 });
         }
       } else {
+        const followIntentAt =
+          typeof body.followIntentAt === "number" && Number.isFinite(body.followIntentAt)
+            ? body.followIntentAt
+            : undefined;
         const result = await verifyWithRetry((token) =>
-          verifyFollowsOfficial(token, user.twitter_id!),
+          verifyFollowsOfficial(token, user.twitter_id!, { followIntentAt }),
         );
         if (!result.ok) {
           if (result.unauthorized) {

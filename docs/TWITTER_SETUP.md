@@ -91,3 +91,4 @@ Ver [VERCEL_TWITTER.md](./VERCEL_TWITTER.md).
 | `?twitter=failed` | Callback URL debe coincidir exactamente en portal X |
 | `?twitter=invalid_state` | Usa `localhost` (no `127.0.0.1`), no incógnito |
 | Quest "not verified" | Misma cuenta conectada, IDs correctos, token no expirado |
+| `following lookup failed (402)` | **Free tier de X** — no permite consultar follows. La app usa verificación alternativa: click **OPEN X** → follow → espera 10s → **EXEC**. Opcional: `TWITTER_FOLLOW_HONOR_VERIFY=false` si tienes X API Basic ($200/mo) |
