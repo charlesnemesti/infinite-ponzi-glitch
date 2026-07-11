@@ -5,6 +5,7 @@ import { Leaderboard } from "@/components/leaderboard/Leaderboard";
 import { ScoreReveal } from "@/components/score/ScoreReveal";
 import { QuestGrid } from "@/components/quests/QuestGrid";
 import { RewardsSection } from "@/components/rewards/RewardsSection";
+import { NodeProfilePanel } from "@/components/profile/NodeProfilePanel";
 import { FlashEventBanner } from "@/components/events/FlashEventBanner";
 import { SquadPanel } from "@/components/squads/SquadPanel";
 import { ScanlinesOverlay } from "@/components/effects/Terminal";
@@ -21,6 +22,7 @@ export default function Home() {
       <HeroSection />
       <ScoreReveal />
       <Leaderboard />
+      <NodeProfilePanel />
       <QuestGrid quests={MOCK_QUESTS} />
       <SquadPanel />
       <RewardsSection />

@@ -10,6 +10,7 @@ import { SocialLinks } from "@/components/social/SocialLinks";
 
 const NAV_ITEMS = [
   { label: "RANK_MATRIX", href: "#leaderboard" },
+  { label: "NODE_PROFILE", href: "#profile" },
   { label: "QUEST_LOG", href: "#quests" },
   { label: "REWARD_POOL", href: "#rewards" },
   { label: "DOCS", href: "#docs" },

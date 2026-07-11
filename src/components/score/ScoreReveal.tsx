@@ -55,6 +55,7 @@ export function ScoreReveal() {
 
             {session?.connected ? (
               <div className="mt-6 space-y-4">
+                {(walletConnected || twitterConnected) && <LinkStatusPanel />}
                 {revealed ? (
                   <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }}>
                     <p className="text-[10px] text-dim">ATTENTION_SCORE ::</p>

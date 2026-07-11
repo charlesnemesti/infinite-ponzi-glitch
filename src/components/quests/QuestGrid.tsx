@@ -61,14 +61,21 @@ function isQuestLocked(questId: string, completed: string[], isConnected: boolea
 export function QuestGrid({ quests }: QuestGridProps) {
   const { isConnected, completedQuests, completeQuest, twitterConnected } = useUser();
   const [executing, setExecuting] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [questErrors, setQuestErrors] = useState<Record<string, string>>({});
 
   const handleExec = async (questId: string) => {
     setExecuting(questId);
-    setError(null);
+    setQuestErrors((prev) => {
+      const next = { ...prev };
+      delete next[questId];
+      return next;
+    });
     const result = await completeQuest(questId);
     if (!result.ok) {
-      setError(result.error ?? `Failed to execute ${questId}`);
+      setQuestErrors((prev) => ({
+        ...prev,
+        [questId]: result.error ?? "Execution failed",
+      }));
     }
     setExecuting(null);
   };
@@ -86,13 +93,13 @@ export function QuestGrid({ quests }: QuestGridProps) {
           <p className="mt-2 max-w-2xl text-xs text-dim">
             {">"} Execute missions for real XP. Wallet + X required for social exploits.
           </p>
-          {error && <p className="mt-2 text-xs text-[#ff0080]">{error}</p>}
         </div>
 
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {quests.map((quest, i) => {
             const completed = completedQuests.includes(quest.id);
             const locked = isQuestLocked(quest.id, completedQuests, isConnected, twitterConnected);
+            const questError = questErrors[quest.id];
 
             return (
               <motion.div
@@ -118,6 +125,9 @@ export function QuestGrid({ quests }: QuestGridProps) {
                 <p className="text-[10px] uppercase tracking-wider text-dim">[{quest.category}]</p>
                 <h3 className="mt-1 text-sm font-bold text-terminal">{quest.title}</h3>
                 <p className="mt-2 text-xs leading-relaxed text-dim">{quest.description}</p>
+                {questError && (
+                  <p className="mt-2 text-[10px] leading-snug text-[#ff0080]">{questError}</p>
+                )}
 
                 <div className="mt-5 flex items-end justify-between">
                   <div>

@@ -8,7 +8,7 @@ import {
   getValidAccessTokenWithRefresh,
   REFRESH_TOKEN_COOKIE,
 } from "@/lib/auth/session";
-import { verifyFollowsOfficial, verifyRetweetedLaunch } from "@/lib/twitter/verify";
+import { verifyFollowsOfficial, verifyRetweetedLaunch, type VerifyResult } from "@/lib/twitter/verify";
 import { isTwitterQuestsConfigured } from "@/lib/twitter/config";
 
 function cookieOptions(maxAge: number) {
@@ -57,19 +57,19 @@ async function resolveAccessToken(forceRefresh = false): Promise<string | null> 
 }
 
 async function verifyWithRetry(
-  verifyFn: (token: string) => Promise<{ ok: boolean; unauthorized?: boolean }>,
-): Promise<boolean> {
+  verifyFn: (token: string) => Promise<VerifyResult>,
+): Promise<VerifyResult> {
   let token = await resolveAccessToken();
-  if (!token) return false;
+  if (!token) return { ok: false, reason: "no X access token" };
 
   let result = await verifyFn(token);
   if (result.unauthorized) {
     token = await resolveAccessToken(true);
-    if (!token) return false;
+    if (!token) return { ok: false, unauthorized: true, reason: "X session expired" };
     result = await verifyFn(token);
   }
 
-  return result.ok;
+  return result;
 }
 
 export async function POST(
@@ -117,15 +117,17 @@ export async function POST(
           return NextResponse.json({ error: "quest verification not configured" }, { status: 503 });
         }
       } else {
-        const ok = await verifyWithRetry((token) =>
+        const result = await verifyWithRetry((token) =>
           verifyFollowsOfficial(token, user.twitter_id!),
         );
-        if (!ok) {
-          const hasToken = await resolveAccessToken();
-          if (!hasToken) {
+        if (!result.ok) {
+          if (result.unauthorized) {
             return NextResponse.json({ error: "X session expired — reconnect X" }, { status: 401 });
           }
-          return NextResponse.json({ error: "follow not verified" }, { status: 400 });
+          return NextResponse.json(
+            { error: result.reason ?? "follow not verified" },
+            { status: 400 },
+          );
         }
       }
       await db.completeQuest(user.id, questId);
@@ -140,15 +142,17 @@ export async function POST(
           return NextResponse.json({ error: "quest verification not configured" }, { status: 503 });
         }
       } else {
-        const ok = await verifyWithRetry((token) =>
+        const result = await verifyWithRetry((token) =>
           verifyRetweetedLaunch(token, user.twitter_id!),
         );
-        if (!ok) {
-          const hasToken = await resolveAccessToken();
-          if (!hasToken) {
+        if (!result.ok) {
+          if (result.unauthorized) {
             return NextResponse.json({ error: "X session expired — reconnect X" }, { status: 401 });
           }
-          return NextResponse.json({ error: "retweet not verified" }, { status: 400 });
+          return NextResponse.json(
+            { error: result.reason ?? "retweet not verified" },
+            { status: 400 },
+          );
         }
       }
       await db.completeQuest(user.id, questId);
