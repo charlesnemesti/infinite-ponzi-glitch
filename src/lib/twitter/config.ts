@@ -14,7 +14,8 @@ export function isTwitterQuestsConfigured(): boolean {
   const hasOfficial =
     Boolean(process.env.TWITTER_OFFICIAL_USER_ID?.trim()) ||
     Boolean(process.env.NEXT_PUBLIC_OFFICIAL_X_HANDLE?.trim()) ||
-    Boolean(OFFICIAL_X_HANDLE);
+    Boolean(OFFICIAL_X_HANDLE) ||
+    hasLaunchTweet;
   return hasLaunchTweet && hasOfficial;
 }
 

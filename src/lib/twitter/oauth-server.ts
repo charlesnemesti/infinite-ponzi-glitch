@@ -3,6 +3,41 @@ import { randomBytes, createHash } from "crypto";
 const TWITTER_AUTH_URL = "https://twitter.com/i/oauth2/authorize";
 const TWITTER_TOKEN_URL = "https://api.twitter.com/2/oauth2/token";
 
+let cachedAppToken: { token: string; expiresAt: number } | null = null;
+
+/** App-only token for server-side lookups (username → id, tweet author, etc.) */
+export async function getAppAccessToken(): Promise<string | null> {
+  if (cachedAppToken && cachedAppToken.expiresAt > Date.now()) {
+    return cachedAppToken.token;
+  }
+
+  const clientId = process.env.TWITTER_CLIENT_ID?.trim();
+  const clientSecret = process.env.TWITTER_CLIENT_SECRET?.trim();
+  if (!clientId || !clientSecret) return null;
+
+  const basicAuth = Buffer.from(`${clientId}:${clientSecret}`).toString("base64");
+  const response = await fetch(TWITTER_TOKEN_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Authorization: `Basic ${basicAuth}`,
+    },
+    body: new URLSearchParams({
+      grant_type: "client_credentials",
+      scope: "tweet.read users.read follows.read",
+    }),
+  });
+
+  if (!response.ok) return null;
+
+  const data = (await response.json()) as { access_token: string; expires_in?: number };
+  cachedAppToken = {
+    token: data.access_token,
+    expiresAt: Date.now() + (data.expires_in ?? 7200) * 1000 - 60_000,
+  };
+  return data.access_token;
+}
+
 export const TWITTER_SCOPES = [
   "tweet.read",
   "users.read",

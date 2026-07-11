@@ -4,23 +4,55 @@ import {
   OFFICIAL_X_URL,
   xMention,
 } from "@/lib/social/config";
+import { getAppAccessToken } from "@/lib/twitter/oauth-server";
 
 const OFFICIAL_X_USER = process.env.TWITTER_OFFICIAL_USER_ID ?? "";
 const LAUNCH_TWEET_ID = process.env.TWITTER_LAUNCH_TWEET_ID ?? "";
 
 export type VerifyResult = { ok: boolean; unauthorized?: boolean; reason?: string };
 
-async function resolveOfficialUserId(accessToken: string): Promise<string | null> {
-  if (OFFICIAL_X_USER) return OFFICIAL_X_USER;
-
+async function lookupUsername(token: string): Promise<string | null> {
   const res = await fetch(
     `https://api.twitter.com/2/users/by/username/${OFFICIAL_X_HANDLE}?user.fields=id`,
-    { headers: { Authorization: `Bearer ${accessToken}` } },
+    { headers: { Authorization: `Bearer ${token}` } },
   );
 
   if (!res.ok) return null;
   const data = await res.json();
   return data.data?.id ?? null;
+}
+
+async function lookupFromLaunchTweet(token: string): Promise<string | null> {
+  if (!LAUNCH_TWEET_ID) return null;
+
+  const res = await fetch(
+    `https://api.twitter.com/2/tweets/${LAUNCH_TWEET_ID}?tweet.fields=author_id`,
+    { headers: { Authorization: `Bearer ${token}` } },
+  );
+
+  if (!res.ok) return null;
+  const data = await res.json();
+  return data.data?.author_id ?? null;
+}
+
+async function resolveOfficialUserId(userAccessToken?: string): Promise<string | null> {
+  if (OFFICIAL_X_USER) return OFFICIAL_X_USER;
+
+  const appToken = await getAppAccessToken();
+  if (appToken) {
+    const fromUsername = await lookupUsername(appToken);
+    if (fromUsername) return fromUsername;
+
+    const fromTweet = await lookupFromLaunchTweet(appToken);
+    if (fromTweet) return fromTweet;
+  }
+
+  if (userAccessToken) {
+    const fromUsername = await lookupUsername(userAccessToken);
+    if (fromUsername) return fromUsername;
+  }
+
+  return null;
 }
 
 export async function verifyFollowsOfficial(
@@ -32,7 +64,10 @@ export async function verifyFollowsOfficial(
   if (!officialId) {
     return {
       ok: process.env.NODE_ENV === "development",
-      reason: process.env.NODE_ENV === "development" ? undefined : "could not resolve official account",
+      reason:
+        process.env.NODE_ENV === "development"
+          ? undefined
+          : "could not resolve @Infinite_Ponzi — set TWITTER_OFFICIAL_USER_ID in env",
     };
   }
 
@@ -92,9 +127,11 @@ export async function verifyRetweetedLaunch(
   const timeline = await userRetweetedFromTimeline(accessToken, userTwitterId);
   if (timeline.ok || timeline.unauthorized) return timeline;
 
+  const appToken = await getAppAccessToken();
+  const lookupToken = appToken ?? accessToken;
   const tweetUrl = `https://api.twitter.com/2/tweets/${LAUNCH_TWEET_ID}/retweeted_by?max_results=1000`;
   const res = await fetch(tweetUrl, {
-    headers: { Authorization: `Bearer ${accessToken}` },
+    headers: { Authorization: `Bearer ${lookupToken}` },
   });
 
   if (res.status === 401) return { ok: false, unauthorized: true };
