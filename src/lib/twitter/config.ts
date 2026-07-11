@@ -1,3 +1,5 @@
+import { OFFICIAL_X_HANDLE } from "@/lib/social/config";
+
 export function isTwitterOAuthConfigured(): boolean {
   return Boolean(
     process.env.TWITTER_CLIENT_ID?.trim() &&
@@ -6,11 +8,14 @@ export function isTwitterOAuthConfigured(): boolean {
   );
 }
 
+/** Social quest verification — launch tweet ID required; official account via env or @handle default */
 export function isTwitterQuestsConfigured(): boolean {
-  return Boolean(
-    process.env.TWITTER_OFFICIAL_USER_ID?.trim() &&
-      process.env.TWITTER_LAUNCH_TWEET_ID?.trim(),
-  );
+  const hasLaunchTweet = Boolean(process.env.TWITTER_LAUNCH_TWEET_ID?.trim());
+  const hasOfficial =
+    Boolean(process.env.TWITTER_OFFICIAL_USER_ID?.trim()) ||
+    Boolean(process.env.NEXT_PUBLIC_OFFICIAL_X_HANDLE?.trim()) ||
+    Boolean(OFFICIAL_X_HANDLE);
+  return hasLaunchTweet && hasOfficial;
 }
 
 export function allowTwitterDevAuth(): boolean {
@@ -30,8 +35,13 @@ export function getMissingTwitterConfig(): string[] {
   if (!process.env.TWITTER_CLIENT_ID?.trim()) missing.push("TWITTER_CLIENT_ID");
   if (!process.env.TWITTER_CLIENT_SECRET?.trim()) missing.push("TWITTER_CLIENT_SECRET");
   if (!process.env.TWITTER_CALLBACK_URL?.trim()) missing.push("TWITTER_CALLBACK_URL");
-  if (!process.env.TWITTER_OFFICIAL_USER_ID?.trim()) missing.push("TWITTER_OFFICIAL_USER_ID");
   if (!process.env.TWITTER_LAUNCH_TWEET_ID?.trim()) missing.push("TWITTER_LAUNCH_TWEET_ID");
+  if (
+    !process.env.TWITTER_OFFICIAL_USER_ID?.trim() &&
+    !process.env.NEXT_PUBLIC_OFFICIAL_X_HANDLE?.trim()
+  ) {
+    missing.push("TWITTER_OFFICIAL_USER_ID (optional — auto-resolved from @Infinite_Ponzi)");
+  }
   if (!process.env.NEXT_PUBLIC_APP_URL?.trim()) missing.push("NEXT_PUBLIC_APP_URL");
   return missing;
 }

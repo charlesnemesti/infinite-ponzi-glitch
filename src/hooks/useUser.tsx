@@ -13,7 +13,7 @@ type UserContextValue = {
   walletConnected: boolean;
   isLinked: boolean;
   sync: () => Promise<void>;
-  completeQuest: (questId: string) => Promise<boolean>;
+  completeQuest: (questId: string) => Promise<{ ok: boolean; error?: string }>;
   address: string | undefined;
   isConnected: boolean;
   refreshTwitterSession: () => Promise<TwitterSession>;
@@ -104,7 +104,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const completeQuest = async (questId: string) => {
-    if (!address) return false;
+    if (!address) return { ok: false, error: "Connect wallet first" };
     const res = await fetch(`/api/quests/${questId}/complete`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -117,9 +117,9 @@ export function UserProvider({ children }: { children: ReactNode }) {
         setUser({ ...user, score: data.score });
       }
       await sync();
-      return true;
+      return { ok: true };
     }
-    return false;
+    return { ok: false, error: data.error ?? `Quest failed (${res.status})` };
   };
 
   const isLinked = Boolean(

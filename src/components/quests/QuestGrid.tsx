@@ -10,7 +10,7 @@ import {
   Users,
   Wallet,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useUser } from "@/hooks/useUser";
 import { LAUNCH_TWEET_URL, OFFICIAL_X_FOLLOW_URL, xMention } from "@/lib/social/config";
 import type { Quest } from "@/types";
@@ -59,22 +59,17 @@ function isQuestLocked(questId: string, completed: string[], isConnected: boolea
 }
 
 export function QuestGrid({ quests }: QuestGridProps) {
-  const { isConnected, completedQuests, completeQuest } = useUser();
+  const { isConnected, completedQuests, completeQuest, twitterConnected } = useUser();
   const [executing, setExecuting] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [twitterConnected, setTwitterConnected] = useState(false);
-
-  useEffect(() => {
-    fetch("/api/auth/session")
-      .then((r) => r.json())
-      .then((s) => setTwitterConnected(s.connected));
-  }, []);
 
   const handleExec = async (questId: string) => {
     setExecuting(questId);
     setError(null);
-    const ok = await completeQuest(questId);
-    if (!ok) setError(`Failed to execute ${questId}`);
+    const result = await completeQuest(questId);
+    if (!result.ok) {
+      setError(result.error ?? `Failed to execute ${questId}`);
+    }
     setExecuting(null);
   };
 
