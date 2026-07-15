@@ -521,6 +521,59 @@ main {
   100% { background-position: 0 100%; }
 }
 
+/* ── Bomb countdown ── */
+.bomb-countdown {
+  box-shadow:
+    inset 0 0 40px rgba(255, 0, 0, 0.08),
+    0 0 24px rgba(255, 255, 0, 0.08);
+}
+
+.bomb-digits {
+  text-shadow:
+    0 0 12px rgba(255, 255, 0, 0.6),
+    0 0 24px rgba(255, 0, 128, 0.3);
+  font-variant-numeric: tabular-nums;
+}
+
+.bomb-digits-live {
+  animation: bomb-go-pulse 1.2s ease-in-out infinite;
+  text-shadow: 0 0 20px rgba(0, 255, 65, 0.8);
+}
+
+.bomb-colon {
+  animation: bomb-colon-blink 1s step-end infinite;
+}
+
+@keyframes bomb-colon-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0.2; }
+}
+
+@keyframes bomb-go-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.85; transform: scale(1.05); }
+}
+
+.bomb-shake {
+  animation: bomb-shake 0.4s ease-in-out infinite;
+}
+
+@keyframes bomb-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-2px); }
+  75% { transform: translateX(2px); }
+}
+
+.bomb-scanline {
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(255, 255, 0, 0.06) 50%,
+    transparent 100%
+  );
+  animation: scan-sweep 2.5s linear infinite;
+}
+
 /* ── Ambient motion ── */
 .ambient-scan-line {
   position: absolute;

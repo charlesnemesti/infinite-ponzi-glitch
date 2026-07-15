@@ -9,7 +9,7 @@ import { ReferralPanel } from "@/components/referral/ReferralPanel";
 import { RankEventToast } from "@/components/leaderboard/RankEventToast";
 import { useLiveLeaderboard } from "@/hooks/useLiveLeaderboard";
 import { useUser } from "@/hooks/useUser";
-import { DEMO_DISCLAIMER } from "@/lib/data/demo-leaderboard";
+import { BombCountdown } from "@/components/contest/BombCountdown";
 
 const FILTERS = ["24H", "7D", "30D", "ALL"] as const;
 
@@ -43,14 +43,7 @@ export function Leaderboard() {
       {glitchFlash && <div className="leaderboard-flash pointer-events-none absolute inset-0 z-20" aria-hidden />}
 
       <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
-        <motion.div
-          initial={{ opacity: 0, y: -8 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          className="mb-6 border border-[#ffff00]/40 bg-[#ffff00]/5 px-4 py-3 font-mono text-[10px] leading-relaxed text-[#ffff00] sm:text-xs"
-        >
-          <span className="mr-2 font-bold">⚠ DEMO_MODE</span>
-          {DEMO_DISCLAIMER}
-        </motion.div>
+        <BombCountdown />
 
         <div className="mb-10 text-center font-mono sm:mb-12">
           <motion.div
