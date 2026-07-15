@@ -6,8 +6,8 @@ En **Vercel → Project → Settings → Environment Variables**, añade:
 
 | Variable | Valor | Entornos |
 |----------|-------|----------|
-| `NEXT_PUBLIC_APP_URL` | `https://www.infiniteponziglitch.fun` | Production |
-| `TWITTER_CALLBACK_URL` | `https://www.infiniteponziglitch.fun/api/auth/twitter/callback` | Production |
+| `NEXT_PUBLIC_APP_URL` | `https://www.infiniteponsiglitch.fun` | Production |
+| `TWITTER_CALLBACK_URL` | *(opcional)* — se deriva de `NEXT_PUBLIC_APP_URL` | — |
 | `TWITTER_CLIENT_ID` | (del portal X, app de @InfPonsiGlitch) | Production, Preview |
 | `TWITTER_CLIENT_SECRET` | (del portal X) | Production, Preview |
 | `TWITTER_OFFICIAL_USER_ID` | `2077399136232439808` (@InfPonsiGlitch) | Production |
@@ -21,7 +21,7 @@ Inicia sesión en [developer.x.com](https://developer.x.com) con **@InfPonsiGlit
 
 ```
 http://localhost:3000/api/auth/twitter/callback
-https://www.infiniteponziglitch.fun/api/auth/twitter/callback
+https://www.infiniteponsiglitch.fun/api/auth/twitter/callback
 ```
 
 Deben coincidir **carácter por carácter** con `TWITTER_CALLBACK_URL` en cada entorno.

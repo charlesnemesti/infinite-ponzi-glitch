@@ -20,6 +20,9 @@ const ERROR_MESSAGES: Record<string, string> = {
   conflict: "X account already linked to another wallet",
 };
 
+const X_PORTAL_HINT =
+  "Register callback at developer.x.com: https://www.infiniteponsiglitch.fun/api/auth/twitter/callback";
+
 export function TwitterConnect({ compact = false, onConnected }: TwitterConnectProps) {
   const { address } = useAccount();
   const { sync, refreshTwitterSession } = useUser();
@@ -51,18 +54,18 @@ export function TwitterConnect({ compact = false, onConnected }: TwitterConnectP
     const params = new URLSearchParams(window.location.search);
     const twitterStatus = params.get("twitter");
     const detail = params.get("detail");
-    if (twitterStatus && ERROR_MESSAGES[twitterStatus]) {
-      setError(
-        detail
-          ? `${ERROR_MESSAGES[twitterStatus]}: ${decodeURIComponent(detail)}`
-          : ERROR_MESSAGES[twitterStatus],
-      );
-    } else if (twitterStatus === "connected") {
+    if (twitterStatus === "connected") {
       setError(null);
       loadSession().then(() => {
         onConnected?.();
         sync();
       });
+    } else if (twitterStatus && ERROR_MESSAGES[twitterStatus]) {
+      const base = detail
+        ? `${ERROR_MESSAGES[twitterStatus]}: ${decodeURIComponent(detail)}`
+        : ERROR_MESSAGES[twitterStatus];
+      const needsPortalHint = twitterStatus === "failed" || twitterStatus === "error";
+      setError(needsPortalHint ? `${base} — ${X_PORTAL_HINT}` : base);
     }
   }, [onConnected, sync, refreshTwitterSession]);
 

@@ -1,4 +1,5 @@
 import { randomBytes, createHash } from "crypto";
+import { getTwitterCallbackUrl } from "@/lib/twitter/config";
 
 const TWITTER_AUTH_URL = "https://twitter.com/i/oauth2/authorize";
 const TWITTER_TOKEN_URL = "https://api.twitter.com/2/oauth2/token";
@@ -65,9 +66,9 @@ export function generateCodeChallenge(verifier: string): string {
 
 export function getTwitterAuthUrl(state: string, codeChallenge: string): string {
   const clientId = process.env.TWITTER_CLIENT_ID;
-  const redirectUri = process.env.TWITTER_CALLBACK_URL;
+  const redirectUri = getTwitterCallbackUrl();
 
-  if (!clientId || !redirectUri) {
+  if (!clientId) {
     throw new Error("Missing Twitter OAuth environment variables");
   }
 
@@ -90,7 +91,7 @@ export async function exchangeTwitterCode(
 ): Promise<{ access_token: string; refresh_token?: string }> {
   const clientId = process.env.TWITTER_CLIENT_ID!;
   const clientSecret = process.env.TWITTER_CLIENT_SECRET!;
-  const redirectUri = process.env.TWITTER_CALLBACK_URL!;
+  const redirectUri = getTwitterCallbackUrl();
 
   const basicAuth = Buffer.from(`${clientId}:${clientSecret}`).toString("base64");
 

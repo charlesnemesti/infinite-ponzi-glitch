@@ -13,7 +13,7 @@ Guía para conectar OAuth 2.0 real en Infinite Ponzi Glitch.
    - **Callback URLs** (añade ambas si usas local + prod):
      ```
      http://localhost:3000/api/auth/twitter/callback
-     https://www.infiniteponziglitch.fun/api/auth/twitter/callback
+     https://www.infiniteponsiglitch.fun/api/auth/twitter/callback
      ```
    - **Website URL:** `http://localhost:3000` o tu dominio
 5. Guarda y copia **OAuth 2.0 Client ID** y **Client Secret**.
@@ -35,6 +35,7 @@ Copia `.env.example` a `.env.local` y rellena:
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 TWITTER_CLIENT_ID=tu_client_id
 TWITTER_CLIENT_SECRET=tu_client_secret
+# Optional — auto-derived from NEXT_PUBLIC_APP_URL if omitted
 TWITTER_CALLBACK_URL=http://localhost:3000/api/auth/twitter/callback
 NEXT_PUBLIC_OFFICIAL_X_HANDLE=InfPonsiGlitch
 TWITTER_OFFICIAL_USER_ID=2077399136232439808
@@ -89,7 +90,8 @@ Ver [VERCEL_TWITTER.md](./VERCEL_TWITTER.md).
 | Síntoma | Solución |
 |---------|----------|
 | Conecta como `@dev_glitch_user` | Rellena credenciales OAuth y `ALLOW_TWITTER_DEV=false` |
-| `?twitter=failed` | Callback URL debe coincidir exactamente en portal X |
+| X muestra "Something went wrong" al autorizar | Callback en [developer.x.com](https://developer.x.com) debe ser **exactamente** `https://www.infiniteponsiglitch.fun/api/auth/twitter/callback` (con **ponsi**, no ponzi) |
+| `?twitter=failed` | Callback URL debe coincidir carácter por carácter en portal X |
 | `?twitter=invalid_state` | Usa `localhost` (no `127.0.0.1`), no incógnito |
 | Quest "not verified" | Misma cuenta conectada, IDs correctos, token no expirado |
 | `following lookup failed (402)` | **Free tier de X** — no permite consultar follows. La app usa verificación alternativa: click **OPEN X** → follow → espera 10s → **EXEC**. Opcional: `TWITTER_FOLLOW_HONOR_VERIFY=false` si tienes X API Basic ($200/mo) |

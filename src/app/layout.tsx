@@ -5,7 +5,7 @@ import { BRAND_NAME } from "@/lib/brand/config";
 import "./globals.css";
 
 const APP_URL =
-  process.env.NEXT_PUBLIC_APP_URL ?? "https://www.infiniteponziglitch.fun";
+  process.env.NEXT_PUBLIC_APP_URL ?? "https://www.infiniteponsiglitch.fun";
 
 const shareTech = Share_Tech_Mono({
   variable: "--font-share-tech",
