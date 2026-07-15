@@ -69,6 +69,15 @@ export function Leaderboard() {
             </GlitchText>
           </motion.h2>
 
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={inView ? { opacity: 1 } : {}}
+            transition={{ delay: 0.2 }}
+            className="mx-auto mt-3 max-w-xl text-[10px] uppercase tracking-wider text-dim sm:text-xs"
+          >
+            99% of taxes split to top 10 nodes · reset every UTC day
+          </motion.p>
+
           <motion.div
             initial={{ opacity: 0 }}
             animate={inView ? { opacity: 1 } : {}}

@@ -35,7 +35,7 @@ export function Footer() {
                 QUEST_LOG
               </a>
               <a href="#rewards" className="hover:text-terminal">
-                REWARD_POOL
+                DAILY_TAX
               </a>
             </div>
           </div>

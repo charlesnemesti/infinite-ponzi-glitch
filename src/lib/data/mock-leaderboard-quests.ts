@@ -67,7 +67,7 @@ export const MOCK_QUESTS: Quest[] = [
 ];
 
 export const SEASON_STATS = {
-  rewardSupplyPercent: 30,
+  taxToTopTenPercent: 99,
   daysLeft: 10,
   totalPosters: 271,
   totalPosts: 1842,

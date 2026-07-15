@@ -6,6 +6,7 @@ import { ChevronDown } from "lucide-react";
 import {
   SEASON_STATS,
 } from "@/lib/data/mock-leaderboard";
+import { TOKENOMICS_TAGLINE } from "@/lib/tokenomics/config";
 import type { LeaderboardEntry } from "@/types";
 import { GlitchText } from "@/components/effects/Terminal";
 import { BootSequence } from "@/components/effects/BootSequence";
@@ -92,7 +93,7 @@ export function HeroSection() {
         >
           <span className="inline-flex items-center gap-2 border border-terminal bg-black/80 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-terminal backdrop-blur-sm sm:text-xs">
             <span className="animate-pulse text-[#ff0080]">●</span>
-            PHASE_1 :: AIRDROP_INJECT
+            PHASE_1 :: TAX_TO_TOP10
           </span>
           <span className="font-mono text-[10px] uppercase tracking-widest text-dim">
             pons · launchpad
@@ -179,7 +180,7 @@ export function HeroSection() {
           className="mt-6 w-full max-w-3xl sm:mt-8"
         >
           <div className="grid grid-cols-3 gap-px border border-terminal bg-terminal/20">
-            <MetricCell label="REWARD_SUPPLY" value={`${SEASON_STATS.rewardSupplyPercent}%`} />
+            <MetricCell label="TAX_SPLIT" value={`${SEASON_STATS.taxToTopTenPercent}%`} />
             <MetricCell
               label="TTL_DAYS"
               value={String(SEASON_STATS.daysLeft)}
@@ -190,7 +191,7 @@ export function HeroSection() {
 
           <div className="border border-t-0 border-terminal bg-black/70 px-4 py-5 text-center backdrop-blur-sm sm:py-6">
             <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-dim sm:text-xs">
-              will_you_survive_the_glitch?
+              {TOKENOMICS_TAGLINE}
             </p>
             <p className="mt-2 font-mono text-[clamp(2.5rem,10vw,4rem)] font-bold leading-none">
               <AnimatedNumber value={SEASON_STATS.totalPosters} />

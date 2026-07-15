@@ -23,14 +23,14 @@ export const metadata: Metadata = {
   metadataBase: new URL(APP_URL),
   title: `${BRAND_NAME} — Create. Earn. Repeat.`,
   description:
-    "Glitched terminal AttentionFi on Pons. Inject quests. Hack the leaderboard. Extract the airdrop.",
+    "AttentionFi on Pons. 99% of taxes paid daily to the top 10 on the rank matrix.",
   icons: {
     icon: [{ url: "/logo.png", sizes: "512x512", type: "image/png" }],
     apple: [{ url: "/apple-icon.png", sizes: "192x192", type: "image/png" }],
   },
   openGraph: {
     title: BRAND_NAME,
-    description: ">> SYSTEM BREACH :: ATTENTION_FI MODULE ACTIVE ON PONS",
+    description: "99% of taxes → top 10 nodes every UTC day. Rank matrix on Pons.",
     images: [
       {
         url: "/logo.png",
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary",
     title: BRAND_NAME,
-    description: ">> SYSTEM BREACH :: ATTENTION_FI MODULE ACTIVE ON PONS",
+    description: "99% of taxes → top 10 nodes every UTC day. Rank matrix on Pons.",
     images: ["/logo.png"],
   },
 };

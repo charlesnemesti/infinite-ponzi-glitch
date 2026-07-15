@@ -15,7 +15,7 @@ const NAV_ITEMS = [
   { label: "RANK", href: "#leaderboard" },
   { label: "PROFILE", href: "#profile" },
   { label: "QUESTS", href: "#quests" },
-  { label: "REWARDS", href: "#rewards" },
+  { label: "TAX", href: "#rewards" },
   { label: "DOCS", href: "#docs" },
 ];
 

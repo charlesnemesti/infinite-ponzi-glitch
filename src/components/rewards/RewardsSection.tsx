@@ -3,37 +3,52 @@
 import { motion } from "framer-motion";
 import { Gift } from "lucide-react";
 import { TerminalFrame } from "@/components/effects/Terminal";
+import {
+  DAILY_TOP_RANK_COUNT,
+  TAX_TO_TOP_TEN_PERCENT,
+  TOKENOMICS_DESCRIPTION,
+  TOKENOMICS_HEADLINE,
+  TOKENOMICS_SUBHEADLINE,
+} from "@/lib/tokenomics/config";
 
 export function RewardsSection() {
   return (
     <section id="rewards" className="py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <TerminalFrame title="reward_pool.exe — ALLOCATING">
+        <TerminalFrame title="tax_router.exe — DAILY_PAYOUT">
           <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
             <div className="font-mono">
               <div className="mb-4 inline-flex items-center gap-2 border border-terminal px-3 py-1 text-[10px] uppercase tracking-wider text-terminal">
                 <Gift size={12} />
-                AIRDROP_INJECT
+                DAILY_TAX_SPLIT
               </div>
               <h2 className="text-3xl font-bold uppercase leading-tight text-terminal sm:text-4xl">
-                30% SUPPLY
+                {TOKENOMICS_HEADLINE}
                 <br />
-                <span className="text-[#ff0080]">FOR EARLY NODES</span>
+                <span className="text-[#ff0080]">{TOKENOMICS_SUBHEADLINE}</span>
               </h2>
               <p className="mt-4 max-w-md text-xs leading-relaxed text-dim">
-                {">"} Accumulate XP via quest execution and rank matrix performance.
+                {">"} {TOKENOMICS_DESCRIPTION}
                 <br />
-                {">"} Distribution method: TBD [MANUAL | SMART_CONTRACT]
+                {">"} Snapshot at UTC midnight · payout to top {DAILY_TOP_RANK_COUNT} wallets
                 <br />
-                {">"} Announced before season end. No guarantees. Stack at own risk.
+                {">"} No guarantees. Rank can change every cycle. Stack at own risk.
               </p>
             </div>
 
             <div className="grid gap-3 sm:grid-cols-2 font-mono">
-              <RewardCard title="QUEST_XP" desc="Base points from mission execution" value="6 ACTIVE" />
-              <RewardCard title="SOCIAL_BOOST" desc="X engagement multiplier" value="UP TO 10x" />
-              <RewardCard title="REFERRAL_LOOP" desc="Invite nodes via unique code" value="NEXT PATCH" />
-              <RewardCard title="RANK_BONUS" desc="Top matrix positions" value="TOP 100" />
+              <RewardCard
+                title="TAX_SPLIT"
+                desc="Share of daily taxes to rank pool"
+                value={`${TAX_TO_TOP_TEN_PERCENT}%`}
+              />
+              <RewardCard
+                title="WINNERS"
+                desc="Top matrix nodes each UTC day"
+                value={`TOP ${DAILY_TOP_RANK_COUNT}`}
+              />
+              <RewardCard title="QUEST_XP" desc="Stack rank via mission execution" value="6 ACTIVE" />
+              <RewardCard title="PAYOUT" desc="Automatic daily distribution" value="ONCHAIN" />
             </div>
           </div>
         </TerminalFrame>

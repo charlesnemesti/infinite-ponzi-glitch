@@ -93,6 +93,7 @@ export function BombCountdown() {
         {live ? (
           <>
             <Row label="STATUS" value="contest active" accent />
+            <Row label="PAYOUT" value="99% daily taxes → top 10" />
             <Row label="MISSION" value="stack XP · climb rank · post on X" />
             <p className="pt-1 text-dim">
               The degen legion is live.{" "}
@@ -104,6 +105,7 @@ export function BombCountdown() {
           <>
             <Row label="NOW" value="preview mode · simulated ranks only" />
             <Row label="AT GO" value={`${CONTEST_START_UTC_LABEL} · real contest unlocks`} accent />
+            <Row label="PAYOUT" value="99% daily taxes → top 10 rank" />
             <ul className="space-y-1 pt-1 text-dim">
               <li>
                 <span className="text-[#ffff00]">{">"}</span> Degen legion deploys on X
@@ -113,7 +115,7 @@ export function BombCountdown() {
                 <span className="text-terminal">IPG</span> becomes the Ponsi wave onchain
               </li>
               <li>
-                <span className="text-[#ffff00]">{">"}</span> XP stacking and rank climb begin
+                <span className="text-[#ffff00]">{">"}</span> Climb rank — taxes split to top 10 every UTC day
               </li>
             </ul>
           </>

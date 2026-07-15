@@ -9,7 +9,7 @@ const BOOT_LINES: { text: string; type?: "ok" | "warn" | "err" }[] = [
   { text: "> PLATFORM::PONS............ OK", type: "ok" },
   { text: "> ATTENTION_FI.dll.......... OK", type: "ok" },
   { text: "> WARN::PONSI_LOOP @ 0x7FFF", type: "warn" },
-  { text: "> AIRDROP::30% SUPPLY LOCKED", type: "ok" },
+  { text: "> TAX::99% TO TOP10 DAILY", type: "ok" },
   { text: "> ERR::STACK OVERFLOW — GO", type: "err" },
   { text: "> SYSTEM READY.", type: "ok" },
 ];
