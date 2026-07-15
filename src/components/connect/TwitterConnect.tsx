@@ -16,7 +16,7 @@ const ERROR_MESSAGES: Record<string, string> = {
   missing: "Missing auth code",
   invalid_state: "Invalid session — try again",
   failed: "X auth failed — check credentials",
-  not_configured: "X OAuth not configured — add keys to .env.local",
+  not_configured: "X OAuth not configured",
   conflict: "X account already linked to another wallet",
 };
 
@@ -30,7 +30,6 @@ export function TwitterConnect({ compact = false, onConnected }: TwitterConnectP
   const [loading, setLoading] = useState(true);
   const [connecting, setConnecting] = useState(false);
   const [devMode, setDevMode] = useState(false);
-  const [notReady, setNotReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const loadSession = async () => {
@@ -46,7 +45,6 @@ export function TwitterConnect({ compact = false, onConnected }: TwitterConnectP
       .then((r) => r.json())
       .then((d) => {
         setDevMode(Boolean(d.devFallback));
-        setNotReady(!d.ready && !d.devFallback);
       });
   }, [refreshTwitterSession]);
 
@@ -139,11 +137,6 @@ export function TwitterConnect({ compact = false, onConnected }: TwitterConnectP
       )}
       {devMode && !error && (
         <span className="text-[9px] text-dim">dev mode (no X API keys)</span>
-      )}
-      {notReady && !error && (
-        <span className="max-w-[200px] text-right text-[9px] text-dim">
-          Add TWITTER_CLIENT_ID + SECRET to .env.local
-        </span>
       )}
     </div>
   );
