@@ -1,16 +1,9 @@
 import { OFFICIAL_X_HANDLE, OFFICIAL_X_USER_ID } from "@/lib/social/config";
+import { getAppUrl, getTwitterCallbackUrl, PRODUCTION_CALLBACK, PRODUCTION_CALLBACK_NO_WWW } from "@/lib/twitter/env";
+import { TWITTER_LOGIN_SCOPES } from "@/lib/twitter/scopes";
+import { verifyTwitterCredentials } from "@/lib/twitter/oauth-server";
 
-const PRODUCTION_APP_URL = "https://www.infiniteponsiglitch.fun";
-
-export function getAppUrl(): string {
-  return process.env.NEXT_PUBLIC_APP_URL?.trim() || "http://localhost:3000";
-}
-
-/** OAuth redirect_uri — derived from APP_URL so it stays in sync with the live domain */
-export function getTwitterCallbackUrl(): string {
-  const base = getAppUrl().replace(/\/$/, "");
-  return `${base}/api/auth/twitter/callback`;
-}
+export { getAppUrl, getTwitterCallbackUrl } from "@/lib/twitter/env";
 
 export function isTwitterOAuthConfigured(): boolean {
   return Boolean(
@@ -59,7 +52,7 @@ export function getMissingTwitterConfig(): string[] {
   return missing;
 }
 
-export function getTwitterConfigStatus() {
+export async function getTwitterConfigStatus() {
   const oauthConfigured = isTwitterOAuthConfigured();
   const questsConfigured = isTwitterQuestsConfigured();
   const devFallback = allowTwitterDevAuth();
@@ -67,23 +60,44 @@ export function getTwitterConfigStatus() {
   const legacyCallback = process.env.TWITTER_CALLBACK_URL?.trim() || null;
   const callbackMismatch =
     legacyCallback !== null && legacyCallback !== callbackUrl;
+  const credentials = oauthConfigured ? await verifyTwitterCredentials() : { ok: false };
 
   return {
     configured: oauthConfigured,
     devFallback,
     questsConfigured,
-    ready: oauthConfigured && !devFallback,
+    ready: oauthConfigured && !devFallback && credentials.ok,
     missing: getMissingTwitterConfig(),
     callbackUrl,
     appUrl: getAppUrl(),
-    /** Exact URL to register in developer.x.com → User authentication → Callback URLs */
+    loginScopes: TWITTER_LOGIN_SCOPES,
     xPortalCallbackUrl: callbackUrl,
+    xPortalCallbacks: [callbackUrl, PRODUCTION_CALLBACK_NO_WWW],
+    xPortalWebsiteUrl: getAppUrl(),
     callbackMismatch,
+    credentialsValid: credentials.ok,
+    ...(credentials.ok
+      ? {}
+      : {
+          credentialsError: credentials.error,
+          credentialsHint:
+            credentials.status === 401 || credentials.status === 403
+              ? "Client ID/Secret invalid — regenerate in developer.x.com and update Vercel env vars"
+              : "Check OAuth 2.0 is enabled under User authentication settings",
+        }),
     ...(callbackMismatch
       ? {
           hint: `TWITTER_CALLBACK_URL (${legacyCallback}) does not match NEXT_PUBLIC_APP_URL. Register ${callbackUrl} in the X developer portal.`,
         }
       : {}),
-    productionCallbackExample: `${PRODUCTION_APP_URL}/api/auth/twitter/callback`,
+    xPortalChecklist: [
+      "User authentication → OAuth 2.0 enabled",
+      "App type: Web App, Automated App or Bot",
+      "App permissions: Read",
+      `Website URL: ${getAppUrl()}`,
+      `Callback URLs (add both): ${callbackUrl} AND ${PRODUCTION_CALLBACK_NO_WWW}`,
+      `Login scopes (minimal): ${TWITTER_LOGIN_SCOPES}`,
+    ],
+    productionCallbackExample: PRODUCTION_CALLBACK,
   };
 }

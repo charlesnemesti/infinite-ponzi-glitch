@@ -1,5 +1,11 @@
 import { randomBytes, createHash } from "crypto";
-import { getTwitterCallbackUrl } from "@/lib/twitter/config";
+import { getTwitterCallbackUrl } from "@/lib/twitter/env";
+import { TWITTER_LOGIN_SCOPES, TWITTER_QUEST_SCOPES } from "@/lib/twitter/scopes";
+
+export { TWITTER_LOGIN_SCOPES, TWITTER_QUEST_SCOPES };
+
+/** @deprecated use TWITTER_LOGIN_SCOPES */
+export const TWITTER_SCOPES = TWITTER_LOGIN_SCOPES;
 
 const TWITTER_AUTH_URL = "https://twitter.com/i/oauth2/authorize";
 const TWITTER_TOKEN_URL = "https://api.twitter.com/2/oauth2/token";
@@ -41,13 +47,6 @@ export async function getAppAccessToken(): Promise<string | null> {
   return data.access_token;
 }
 
-export const TWITTER_SCOPES = [
-  "tweet.read",
-  "users.read",
-  "follows.read",
-  "offline.access",
-].join(" ");
-
 function base64UrlEncode(buffer: Buffer): string {
   return buffer
     .toString("base64")
@@ -76,7 +75,7 @@ export function getTwitterAuthUrl(state: string, codeChallenge: string): string 
     response_type: "code",
     client_id: clientId,
     redirect_uri: redirectUri,
-    scope: TWITTER_SCOPES,
+    scope: TWITTER_LOGIN_SCOPES,
     state,
     code_challenge: codeChallenge,
     code_challenge_method: "S256",
@@ -118,6 +117,38 @@ export async function exchangeTwitterCode(
   }
 
   return response.json();
+}
+
+/** Validates Client ID + Secret against X token endpoint (no user login required) */
+export async function verifyTwitterCredentials(): Promise<{
+  ok: boolean;
+  status?: number;
+  error?: string;
+}> {
+  const clientId = process.env.TWITTER_CLIENT_ID?.trim();
+  const clientSecret = process.env.TWITTER_CLIENT_SECRET?.trim();
+  if (!clientId || !clientSecret) {
+    return { ok: false, error: "TWITTER_CLIENT_ID or TWITTER_CLIENT_SECRET missing" };
+  }
+
+  const basicAuth = Buffer.from(`${clientId}:${clientSecret}`).toString("base64");
+  const response = await fetch(TWITTER_TOKEN_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Authorization: `Basic ${basicAuth}`,
+    },
+    body: new URLSearchParams({
+      grant_type: "client_credentials",
+      client_id: clientId,
+      scope: "users.read",
+    }),
+  });
+
+  if (response.ok) return { ok: true };
+
+  const text = await response.text();
+  return { ok: false, status: response.status, error: text.slice(0, 240) };
 }
 
 export async function fetchTwitterUser(accessToken: string) {

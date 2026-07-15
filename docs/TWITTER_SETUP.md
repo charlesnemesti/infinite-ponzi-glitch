@@ -8,24 +8,25 @@ Guía para conectar OAuth 2.0 real en Infinite Ponzi Glitch.
 2. Crea un **Project** → **App**.
 3. Ve a **User authentication settings** → **Set up**.
 4. Configura:
-   - **App type:** Web App
+   - **App type:** Web App, Automated App or Bot
    - **App permissions:** Read
-   - **Callback URLs** (añade ambas si usas local + prod):
+   - **Website URL:** `https://www.infiniteponsiglitch.fun`
+   - **Callback URLs** (añade **las tres**):
      ```
      http://localhost:3000/api/auth/twitter/callback
      https://www.infiniteponsiglitch.fun/api/auth/twitter/callback
+     https://infiniteponsiglitch.fun/api/auth/twitter/callback
      ```
-   - **Website URL:** `http://localhost:3000` o tu dominio
-5. Guarda y copia **OAuth 2.0 Client ID** y **Client Secret**.
+5. Guarda y copia **OAuth 2.0 Client ID** y **Client Secret** (no uses API Key OAuth 1.0).
 
 ## 2. Scopes requeridos
 
-La app solicita automáticamente:
+La app solicita solo scopes mínimos en login (free tier):
 
-- `tweet.read` — verificar retweets
 - `users.read` — login y perfil
-- `follows.read` — verificar follow
-- `offline.access` — refresh token (renovación automática)
+- `offline.access` — refresh token
+
+Quests usan verificación alternativa sin `follows.read` en login (honor verify + app token).
 
 ## 3. Variables de entorno
 
@@ -90,7 +91,7 @@ Ver [VERCEL_TWITTER.md](./VERCEL_TWITTER.md).
 | Síntoma | Solución |
 |---------|----------|
 | Conecta como `@dev_glitch_user` | Rellena credenciales OAuth y `ALLOW_TWITTER_DEV=false` |
-| X muestra "Something went wrong" al autorizar | Callback en [developer.x.com](https://developer.x.com) debe ser **exactamente** `https://www.infiniteponsiglitch.fun/api/auth/twitter/callback` (con **ponsi**, no ponzi) |
+| X muestra "Something went wrong" al autorizar | 1) Callbacks exactos (con y sin `www`) 2) Website URL = dominio prod 3) Regenera Client Secret → actualiza Vercel 4) Verifica `/api/auth/twitter/status` → `credentialsValid: true` |
 | `?twitter=failed` | Callback URL debe coincidir carácter por carácter en portal X |
 | `?twitter=invalid_state` | Usa `localhost` (no `127.0.0.1`), no incógnito |
 | Quest "not verified" | Misma cuenta conectada, IDs correctos, token no expirado |
