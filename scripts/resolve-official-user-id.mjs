@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Resolve @Infinite_Ponzi numeric user ID for TWITTER_OFFICIAL_USER_ID.
+ * Resolve @InfPonsiGlitch numeric user ID for TWITTER_OFFICIAL_USER_ID.
  * Usage: npm run resolve:official-id
  */
 import { readFileSync, existsSync } from "fs";
@@ -24,6 +24,8 @@ loadEnvLocal();
 
 const clientId = process.env.TWITTER_CLIENT_ID?.trim();
 const clientSecret = process.env.TWITTER_CLIENT_SECRET?.trim();
+const handle = process.env.NEXT_PUBLIC_OFFICIAL_X_HANDLE?.trim() || "InfPonsiGlitch";
+
 const launchTweetId = process.env.TWITTER_LAUNCH_TWEET_ID?.trim();
 
 if (!clientId || !clientSecret) {
@@ -67,7 +69,7 @@ async function tryLookup(label, url) {
 
 const userData = await tryLookup(
   "username",
-  "https://api.twitter.com/2/users/by/username/Infinite_Ponzi?user.fields=id",
+  `https://api.twitter.com/2/users/by/username/${handle}?user.fields=id`,
 );
 
 let userId = userData?.data?.id;

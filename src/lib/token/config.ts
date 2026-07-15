@@ -1,14 +1,18 @@
 import { robinhoodChain } from "@/lib/chains/robinhood";
+import { BRAND_SHORT } from "@/lib/brand/config";
 
-/** $IPG token contract on Robinhood Chain mainnet (4663) */
-export const TOKEN_CA =
-  process.env.NEXT_PUBLIC_TOKEN_CA ?? "0x28a213ea1a49e53a5022e9a6209c1dafdfd47777";
+/** Token contract — set via NEXT_PUBLIC_TOKEN_CA when live */
+export const TOKEN_CA = process.env.NEXT_PUBLIC_TOKEN_CA?.trim() ?? "";
 
-export const TOKEN_SYMBOL = process.env.NEXT_PUBLIC_TOKEN_SYMBOL ?? "IPG";
+export const TOKEN_SYMBOL = process.env.NEXT_PUBLIC_TOKEN_SYMBOL?.trim() || BRAND_SHORT;
 
 const explorer = robinhoodChain.blockExplorers?.default.url ?? "https://robinhoodchain.blockscout.com";
 
-export const TOKEN_EXPLORER_URL = `${explorer}/token/${TOKEN_CA}`;
+export function hasTokenCa(): boolean {
+  return /^0x[a-fA-F0-9]{40}$/.test(TOKEN_CA);
+}
+
+export const TOKEN_EXPLORER_URL = hasTokenCa() ? `${explorer}/token/${TOKEN_CA}` : "";
 
 export function truncateCa(address: string, head = 6, tail = 4): string {
   if (address.length <= head + tail + 2) return address;

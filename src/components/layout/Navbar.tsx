@@ -3,11 +3,13 @@
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { BRAND_NAME } from "@/lib/brand/config";
 import { BrandLogo } from "@/components/brand/BrandLogo";
 import { TwitterConnect } from "@/components/connect/TwitterConnect";
 import { MetaMaskConnect } from "@/components/connect/MetaMaskConnect";
 import { SocialLinks } from "@/components/social/SocialLinks";
 import { ContractAddressBar } from "@/components/token/ContractAddressBar";
+import { PonsLaunchLink } from "@/components/platform/PonsLaunchLink";
 
 const NAV_ITEMS = [
   { label: "RANK_MATRIX", href: "#leaderboard" },
@@ -26,7 +28,7 @@ export function Navbar() {
         <Link href="/" className="group flex items-center gap-2 font-mono">
           <BrandLogo size="sm" priority className="transition-opacity group-hover:opacity-90" />
           <span className="hidden text-sm font-bold uppercase tracking-wider text-terminal group-hover:text-[#00f0ff] transition-colors sm:block">
-            Infinite Ponzi Glitch
+            {BRAND_NAME}
           </span>
         </Link>
 
@@ -44,6 +46,7 @@ export function Navbar() {
 
         <div className="hidden items-center gap-2 lg:gap-3 md:flex">
           <ContractAddressBar variant="navbar" />
+          <PonsLaunchLink variant="compact" />
           <SocialLinks compact />
           <TwitterConnect compact />
           <MetaMaskConnect compact />
@@ -74,6 +77,7 @@ export function Navbar() {
             ))}
             <div className="mt-2 flex flex-col gap-2 border-t border-terminal pt-4">
               <ContractAddressBar variant="hero" />
+              <PonsLaunchLink />
               <SocialLinks />
               <TwitterConnect />
               <MetaMaskConnect />

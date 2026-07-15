@@ -61,7 +61,7 @@ function getStore(): Store {
 
 function seedDemoUsers(store: Store) {
   const demos = [
-    { handle: "glitch_prophet", name: "GLITCH_PROPHET", avatar: "G", score: 142800, delta: 11800, refs: 12 },
+    { handle: "Vladtenev", name: "Vladtenev", avatar: "V", score: 142800, delta: 11800, refs: 12 },
     { handle: "ponzi_pilot_rh", name: "PonziPilot", avatar: "P", score: 108420, delta: 9200, refs: 8 },
     { handle: "stack_overflow_x", name: "StackOverflow", avatar: "S", score: 67420, delta: 5100, refs: 5 },
     { handle: "chainrunner4663", name: "ChainRunner", avatar: "R", score: 52100, delta: 3800, refs: 3 },

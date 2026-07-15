@@ -1,4 +1,5 @@
 import { clsx } from "clsx";
+import { BRAND_NAME } from "@/lib/brand/config";
 
 type BrandLogoProps = {
   size?: "sm" | "md" | "lg" | "xl";
@@ -16,7 +17,7 @@ const SIZES = {
 
 export function BrandLogo({
   size = "md",
-  showBorder = true,
+  showBorder = false,
   className,
   priority = false,
 }: BrandLogoProps) {
@@ -26,7 +27,7 @@ export function BrandLogo({
     // eslint-disable-next-line @next/next/no-img-element
     <img
       src="/logo.png"
-      alt="Infinite Ponzi Glitch"
+      alt={`${BRAND_NAME} logo`}
       width={px}
       height={px}
       loading={priority ? "eager" : "lazy"}

@@ -4,7 +4,7 @@ Guía para conectar OAuth 2.0 real en Infinite Ponzi Glitch.
 
 ## 1. Portal de desarrollador (developer.x.com)
 
-1. Entra en [https://developer.x.com](https://developer.x.com) con tu cuenta oficial.
+1. Entra en [https://developer.x.com](https://developer.x.com) con **@InfPonsiGlitch**.
 2. Crea un **Project** → **App**.
 3. Ve a **User authentication settings** → **Set up**.
 4. Configura:
@@ -36,8 +36,9 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 TWITTER_CLIENT_ID=tu_client_id
 TWITTER_CLIENT_SECRET=tu_client_secret
 TWITTER_CALLBACK_URL=http://localhost:3000/api/auth/twitter/callback
-TWITTER_OFFICIAL_USER_ID=1234567890
-TWITTER_LAUNCH_TWEET_ID=9876543210
+NEXT_PUBLIC_OFFICIAL_X_HANDLE=InfPonsiGlitch
+TWITTER_OFFICIAL_USER_ID=2077399136232439808
+TWITTER_LAUNCH_TWEET_ID=
 ALLOW_TWITTER_DEV=false
 ```
 
@@ -75,7 +76,7 @@ Respuesta esperada con OAuth real:
    - Si ya tienes wallet conectada, la dirección se guarda en cookie y se vincula automáticamente al volver
 4. Autoriza → vuelves con `?twitter=connected&linked=1`
 5. El panel **identity_link_status** debe mostrar WALLET + X_ACCOUNT + LINKED `[OK]`
-6. Sigue @Infinite_Ponzi + retweetea el pin → **EXEC** en quests
+6. Sigue @InfPonsiGlitch + retweetea el pin → **EXEC** en quests
 
 Orden alternativo: conectar X primero y wallet después — el sync se dispara al conectar MetaMask.
 

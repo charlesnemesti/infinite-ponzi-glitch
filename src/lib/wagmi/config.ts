@@ -6,6 +6,7 @@ import {
 } from "@rainbow-me/rainbowkit/wallets";
 import { createConfig, http } from "wagmi";
 import { robinhoodChain } from "@/lib/chains/robinhood";
+import { BRAND_NAME } from "@/lib/brand/config";
 
 const projectId =
   process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID ?? "ipg-dev-placeholder";
@@ -18,7 +19,7 @@ const connectors = connectorsForWallets(
     },
   ],
   {
-    appName: "Infinite Ponzi Glitch",
+    appName: BRAND_NAME,
     projectId,
   },
 );

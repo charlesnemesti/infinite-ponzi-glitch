@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import { ImageResponse } from "@vercel/og";
 import { getAppUrl } from "@/lib/auth/session";
+import { BRAND_SLUG } from "@/lib/brand/config";
 
 export const runtime = "nodejs";
 
@@ -30,7 +31,7 @@ export async function GET(request: NextRequest) {
         }}
       >
         <div style={{ color: "#00ff4180", fontSize: 14, letterSpacing: 4 }}>
-          INFINITE_PONZI_GLITCH
+          {BRAND_SLUG}
         </div>
         <div style={{ color: "#00ff41", fontSize: 36, fontWeight: 700, marginTop: 20 }}>
           @{username}

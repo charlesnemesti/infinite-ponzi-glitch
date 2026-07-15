@@ -11,11 +11,17 @@ import { GlitchText } from "@/components/effects/Terminal";
 import { BootSequence } from "@/components/effects/BootSequence";
 import { LiveFeedTicker } from "@/components/leaderboard/LiveFeedTicker";
 import { BrandLogo } from "@/components/brand/BrandLogo";
+import { hasTokenCa } from "@/lib/token/config";
 import { ContractAddressBar } from "@/components/token/ContractAddressBar";
+import { PonsLaunchLink } from "@/components/platform/PonsLaunchLink";
+
+function formatNum(value: number): string {
+  return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
 
 function AnimatedNumber({ value }: { value: number }) {
   const count = useMotionValue(0);
-  const rounded = useTransform(count, (v) => Math.round(v).toLocaleString());
+  const rounded = useTransform(count, (v) => formatNum(Math.round(v)));
 
   useEffect(() => {
     const controls = animate(count, value, { duration: 2.2, ease: "easeOut" });
@@ -41,10 +47,11 @@ export function HeroSection() {
       className="relative flex h-[100dvh] flex-col overflow-hidden pt-14 sm:pt-16"
     >
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-1/2 top-1/2 h-[60vmin] w-[60vmin] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#00ff41]/6 blur-[100px]" />
-        <div className="absolute bottom-0 left-0 h-[40vmin] w-[40vmin] bg-[#ff0080]/4 blur-[80px]" />
+        <div className="orb-drift-a absolute left-1/2 top-1/2 h-[60vmin] w-[60vmin] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#00ff41]/6 blur-[100px]" />
+        <div className="orb-drift-b absolute bottom-0 left-0 h-[40vmin] w-[40vmin] bg-[#ff0080]/4 blur-[80px]" />
+        <div className="orb-drift-b absolute right-0 top-1/4 h-[30vmin] w-[30vmin] bg-[#00f0ff]/5 blur-[90px]" />
         <div
-          className="absolute inset-0 opacity-[0.03]"
+          className="grid-drift absolute inset-0 opacity-[0.04]"
           style={{
             backgroundImage:
               "linear-gradient(#00ff41 1px, transparent 1px), linear-gradient(90deg, #00ff41 1px, transparent 1px)",
@@ -69,7 +76,7 @@ export function HeroSection() {
           initial={{ opacity: 0, scale: 0.85 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
-          className="mb-3 sm:mb-4"
+          className="logo-float mb-3 sm:mb-4"
         >
           <BrandLogo
             size="xl"
@@ -89,18 +96,20 @@ export function HeroSection() {
             PHASE_1 :: AIRDROP_INJECT
           </span>
           <span className="font-mono text-[10px] uppercase tracking-widest text-dim">
-            chain_4663 · mainnet
+            pons · launchpad
           </span>
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: -4 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.15 }}
-          className="mb-4 sm:mb-5"
-        >
-          <ContractAddressBar variant="hero" />
-        </motion.div>
+        {hasTokenCa() ? (
+          <motion.div
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 }}
+            className="mb-4 sm:mb-5"
+          >
+            <ContractAddressBar variant="hero" />
+          </motion.div>
+        ) : null}
 
         {/* Top 3 flanking — solo desktop */}
         <div className="mb-2 hidden w-full max-w-4xl items-center justify-between font-mono text-[10px] xl:flex">
@@ -124,27 +133,27 @@ export function HeroSection() {
           </GlitchText>
           <br />
           <GlitchText as="span" className="hero-glitch text-[#ff0080]">
-            PONZI
+            PONSI
           </GlitchText>
           <span className="text-dim">_</span>
           <GlitchText as="span" className="hero-glitch text-[#00f0ff]">
-            GLITCH
+            GLIITCH
           </GlitchText>
         </motion.h1>
 
         {/* Champion #1 from live API */}
         {tickerEntries[0] && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            initial={{ opacity: 0, x: -8 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.4 }}
-            className="mt-4 flex items-center gap-3 border border-terminal/40 bg-black/50 px-4 py-2 font-mono backdrop-blur-sm sm:mt-5"
+            className="champion-pulse-box scan-line relative mt-4 flex items-center gap-3 overflow-hidden border bg-black/50 px-4 py-2 font-mono backdrop-blur-sm sm:mt-5"
           >
             <span className="text-[#ffff00]">#1</span>
             <span className="text-terminal">@{tickerEntries[0].handle}</span>
             <span className="text-dim">·</span>
-            <span className="font-bold text-[#00f0ff]">
-              {tickerEntries[0].score.toLocaleString()}
+            <span className="score-tick font-bold text-[#00f0ff]">
+              {formatNum(tickerEntries[0].score)}
             </span>
           </motion.div>
         )}
@@ -159,6 +168,7 @@ export function HeroSection() {
           <a href="#quests" className="btn-terminal text-[10px] sm:text-xs">
             {">"} INJECT_QUESTS
           </a>
+          <PonsLaunchLink />
           <a href="#leaderboard" className="btn-terminal-ghost text-[10px] sm:text-xs">
             {">"} RANK_MATRIX
           </a>
@@ -194,7 +204,7 @@ export function HeroSection() {
             <div className="mt-4 flex justify-center gap-6 font-mono text-[10px] sm:gap-10 sm:text-xs">
               <span>
                 <span className="text-dim">POSTS </span>
-                <span className="text-terminal">{SEASON_STATS.totalPosts.toLocaleString()}</span>
+                <span className="text-terminal">{formatNum(SEASON_STATS.totalPosts)}</span>
               </span>
               <span>
                 <span className="text-dim">REACH </span>
@@ -267,7 +277,7 @@ function RankPeek({
     >
       <span className="text-terminal">#{rank.rank}</span>
       <span>@{rank.handle}</span>
-      <span className="font-bold text-[#00f0ff]">{rank.score.toLocaleString()}</span>
+      <span className="font-bold text-[#00f0ff]">{formatNum(rank.score)}</span>
     </div>
   );
 }

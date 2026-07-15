@@ -42,7 +42,7 @@ export function getMissingTwitterConfig(): string[] {
     !process.env.TWITTER_OFFICIAL_USER_ID?.trim() &&
     !process.env.NEXT_PUBLIC_OFFICIAL_X_HANDLE?.trim()
   ) {
-    missing.push("TWITTER_OFFICIAL_USER_ID (optional — auto-resolved from @Infinite_Ponzi)");
+    missing.push("TWITTER_OFFICIAL_USER_ID (optional — auto-resolved from official X handle)");
   }
   if (!process.env.NEXT_PUBLIC_APP_URL?.trim()) missing.push("NEXT_PUBLIC_APP_URL");
   return missing;

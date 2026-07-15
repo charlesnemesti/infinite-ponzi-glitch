@@ -1,11 +1,11 @@
-import { xMention } from "@/lib/social/config";
+import { hasLaunchTweet, hasOfficialX, xMention } from "@/lib/social/config";
 import type { Quest } from "@/types";
 
 export const MOCK_QUESTS: Quest[] = [
   {
     id: "connect-wallet",
     title: "Connect Wallet",
-    description: "Link your wallet on Robinhood Chain mainnet to unlock the quest board.",
+    description: "Link your wallet to unlock the quest board.",
     reward: 500,
     category: "onchain",
     status: "available",
@@ -23,8 +23,10 @@ export const MOCK_QUESTS: Quest[] = [
   },
   {
     id: "follow-project",
-    title: `Follow ${xMention()}`,
-    description: `Follow ${xMention()} on X — official project node. All social quests verify against this account.`,
+    title: hasOfficialX() ? `Follow ${xMention()}` : "Follow Official X",
+    description: hasOfficialX()
+      ? `Follow ${xMention()} on X — official project node. All social quests verify against this account.`
+      : "Follow the official X account when the handle is configured.",
     reward: 750,
     category: "social",
     status: "locked",
@@ -33,7 +35,9 @@ export const MOCK_QUESTS: Quest[] = [
   {
     id: "retweet-launch",
     title: "Retweet Launch Post",
-    description: "Amplify the pinned launch thread to boost your reach score.",
+    description: hasLaunchTweet()
+      ? "Amplify the pinned launch thread to boost your reach score."
+      : "Amplify the launch thread when the pin URL is configured.",
     reward: 1500,
     category: "social",
     status: "locked",
@@ -53,7 +57,7 @@ export const MOCK_QUESTS: Quest[] = [
   {
     id: "write-opinion",
     title: "Write an Opinion Piece",
-    description: "Publish a thread or article about Robinhood Chain ecosystem.",
+    description: "Publish a thread or article about the Pons ecosystem.",
     reward: 5000,
     category: "content",
     status: "locked",

@@ -33,7 +33,7 @@ function verifyFollowHonor(followIntentAt?: number): VerifyResult {
   if (!followIntentAt) {
     return {
       ok: false,
-      reason: "click OPEN X, follow @Infinite_Ponzi, wait 10s, then EXEC",
+      reason: `click OPEN X, follow ${xMention()}, wait 10s, then EXEC`,
     };
   }
 
@@ -42,7 +42,7 @@ function verifyFollowHonor(followIntentAt?: number): VerifyResult {
     return { ok: false, reason: "wait 10s after opening X, then retry EXEC" };
   }
   if (age > FOLLOW_INTENT_MAX_MS) {
-    return { ok: false, reason: "click OPEN X again, follow @Infinite_Ponzi, then EXEC" };
+    return { ok: false, reason: `click OPEN X again, follow ${xMention()}, then EXEC` };
   }
 
   return { ok: true };
@@ -153,7 +153,7 @@ export async function verifyFollowsOfficial(
       reason:
         process.env.NODE_ENV === "development"
           ? undefined
-          : "could not resolve @Infinite_Ponzi — set TWITTER_OFFICIAL_USER_ID in env",
+          : `could not resolve ${xMention()} — set TWITTER_OFFICIAL_USER_ID in env`,
     };
   }
 

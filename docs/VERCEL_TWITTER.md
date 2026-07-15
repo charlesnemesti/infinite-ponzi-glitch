@@ -8,16 +8,16 @@ En **Vercel → Project → Settings → Environment Variables**, añade:
 |----------|-------|----------|
 | `NEXT_PUBLIC_APP_URL` | `https://www.infiniteponziglitch.fun` | Production |
 | `TWITTER_CALLBACK_URL` | `https://www.infiniteponziglitch.fun/api/auth/twitter/callback` | Production |
-| `TWITTER_CLIENT_ID` | (del portal X, app de @Infinite_Ponzi) | Production, Preview |
+| `TWITTER_CLIENT_ID` | (del portal X, app de @InfPonsiGlitch) | Production, Preview |
 | `TWITTER_CLIENT_SECRET` | (del portal X) | Production, Preview |
-| `TWITTER_OFFICIAL_USER_ID` | ID numérico de @Infinite_Ponzi | Production |
+| `TWITTER_OFFICIAL_USER_ID` | `2077399136232439808` (@InfPonsiGlitch) | Production |
 | `TWITTER_LAUNCH_TWEET_ID` | ID del tweet pin de launch | Production |
 | `ALLOW_TWITTER_DEV` | `false` | Production |
-| `NEXT_PUBLIC_OFFICIAL_X_HANDLE` | `Infinite_Ponzi` | Production |
+| `NEXT_PUBLIC_OFFICIAL_X_HANDLE` | `InfPonsiGlitch` | Production |
 
 ## Callback en developer.x.com
 
-Inicia sesión en [developer.x.com](https://developer.x.com) con **@Infinite_Ponzi** y añade ambas URLs en **Callback URLs**:
+Inicia sesión en [developer.x.com](https://developer.x.com) con **@InfPonsiGlitch** y añade ambas URLs en **Callback URLs**:
 
 ```
 http://localhost:3000/api/auth/twitter/callback

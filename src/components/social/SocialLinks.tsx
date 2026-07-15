@@ -1,6 +1,11 @@
 "use client";
 
-import { OFFICIAL_X_FOLLOW_URL, OFFICIAL_X_URL, xMention } from "@/lib/social/config";
+import {
+  hasOfficialX,
+  OFFICIAL_X_FOLLOW_URL,
+  OFFICIAL_X_URL,
+  xMention,
+} from "@/lib/social/config";
 
 type SocialLinksProps = {
   compact?: boolean;
@@ -8,6 +13,8 @@ type SocialLinksProps = {
 };
 
 export function SocialLinks({ compact = false, className = "" }: SocialLinksProps) {
+  if (!hasOfficialX()) return null;
+
   return (
     <div className={`flex flex-wrap items-center gap-2 font-mono ${className}`}>
       <a

@@ -7,9 +7,9 @@ export const DEMO_DISCLAIMER =
 export const DEMO_LEADERBOARD: LeaderboardEntry[] = [
   {
     rank: 1,
-    handle: "glitch_prophet",
-    displayName: "GLITCH_PROPHET",
-    avatar: "G",
+    handle: "Vladtenev",
+    displayName: "Vladtenev",
+    avatar: "V",
     score: 142800,
     posts: 4,
     reach: 2200,

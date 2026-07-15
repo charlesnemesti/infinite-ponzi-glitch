@@ -9,13 +9,14 @@ import { NodeProfilePanel } from "@/components/profile/NodeProfilePanel";
 import { FlashEventBanner } from "@/components/events/FlashEventBanner";
 import { SquadPanel } from "@/components/squads/SquadPanel";
 import { ScanlinesOverlay } from "@/components/effects/Terminal";
-import { GlitchBackground, StatusBar } from "@/components/effects/GlitchEffects";
+import { GlitchBackground, StatusBar, AmbientScanBeam } from "@/components/effects/GlitchEffects";
 import { MOCK_QUESTS } from "@/lib/data/mock-leaderboard";
 
 export default function Home() {
   return (
     <main className="noise-bg relative min-h-screen bg-[#030303] pb-8">
       <GlitchBackground />
+      <AmbientScanBeam />
       <ScanlinesOverlay />
       <FlashEventBanner />
       <Navbar />

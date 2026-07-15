@@ -2,7 +2,13 @@
 
 import { Check, Copy, ExternalLink } from "lucide-react";
 import { useState } from "react";
-import { TOKEN_CA, TOKEN_EXPLORER_URL, TOKEN_SYMBOL, truncateCa } from "@/lib/token/config";
+import {
+  hasTokenCa,
+  TOKEN_CA,
+  TOKEN_EXPLORER_URL,
+  TOKEN_SYMBOL,
+  truncateCa,
+} from "@/lib/token/config";
 
 type ContractAddressBarProps = {
   variant?: "hero" | "navbar" | "footer";
@@ -11,6 +17,8 @@ type ContractAddressBarProps = {
 
 export function ContractAddressBar({ variant = "hero", className = "" }: ContractAddressBarProps) {
   const [copied, setCopied] = useState(false);
+
+  if (!hasTokenCa()) return null;
 
   const copyCa = async () => {
     try {
@@ -51,15 +59,17 @@ export function ContractAddressBar({ variant = "hero", className = "" }: Contrac
             {copied ? <Check size={12} /> : <Copy size={12} />}
             {copied ? "COPIED" : "COPY"}
           </button>
-          <a
-            href={TOKEN_EXPLORER_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-terminal-ghost inline-flex items-center gap-1 px-2 py-1 text-[10px] hover:text-[#00f0ff]"
-          >
-            <ExternalLink size={12} />
-            EXPLORER
-          </a>
+          {TOKEN_EXPLORER_URL ? (
+            <a
+              href={TOKEN_EXPLORER_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-terminal-ghost inline-flex items-center gap-1 px-2 py-1 text-[10px] hover:text-[#00f0ff]"
+            >
+              <ExternalLink size={12} />
+              EXPLORER
+            </a>
+          ) : null}
         </div>
       </div>
     );
@@ -83,14 +93,16 @@ export function ContractAddressBar({ variant = "hero", className = "" }: Contrac
         <span className="sm:hidden">{truncateCa(TOKEN_CA, 8, 6)}</span>
         {copied ? <Check size={12} className="text-terminal" /> : <Copy size={12} />}
       </button>
-      <a
-        href={TOKEN_EXPLORER_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-[10px] uppercase tracking-wider text-dim transition hover:text-[#00f0ff]"
-      >
-        <ExternalLink size={12} className="inline" />
-      </a>
+      {TOKEN_EXPLORER_URL ? (
+        <a
+          href={TOKEN_EXPLORER_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[10px] uppercase tracking-wider text-dim transition hover:text-[#00f0ff]"
+        >
+          <ExternalLink size={12} className="inline" />
+        </a>
+      ) : null}
     </div>
   );
 }

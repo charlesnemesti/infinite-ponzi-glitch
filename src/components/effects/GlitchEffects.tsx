@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { BRAND_SHORT } from "@/lib/brand/config";
 
 const GLITCH_CHARS = "█▓▒░╔═╗╚╝║@#$%&*!?01▄▀";
 
@@ -74,17 +75,20 @@ export function ScreenTear() {
 
 const FLOAT_LINES = [
   "0xDEADBEEF",
-  "PONZI_LOOP++",
+  "PONSI_LOOP++",
+  "GLIITCH.exe",
   "STACK_OVERFLOW",
   "malloc(∞)",
   "SEG_FAULT",
   "ATTENTION_FI",
-  "CHAIN_4663",
+  "PONS.FAMILY",
   "ERR_NULL_PTR",
   "while(true){",
-  "glitch.exe",
-  "█▓▒░",
   "INJECT_OK",
+  "█▓▒░",
+  "VLADtenev",
+  "0x7FFF",
+  "NODE_SYNC",
 ];
 
 export function GlitchBackground() {
@@ -94,13 +98,13 @@ export function GlitchBackground() {
 
   useEffect(() => {
     setLines(
-      Array.from({ length: 18 }, (_, i) => ({
+      Array.from({ length: 28 }, (_, i) => ({
         id: i,
         text: FLOAT_LINES[i % FLOAT_LINES.length],
         x: Math.random() * 95,
         y: Math.random() * 95,
-        opacity: 0.03 + Math.random() * 0.06,
-        dur: 12 + Math.random() * 20,
+        opacity: 0.04 + Math.random() * 0.08,
+        dur: 8 + Math.random() * 14,
       })),
     );
   }, []);
@@ -123,6 +127,14 @@ export function GlitchBackground() {
         </span>
       ))}
       <div className="crt-vignette absolute inset-0" />
+    </div>
+  );
+}
+
+export function AmbientScanBeam() {
+  return (
+    <div className="ambient-scan-beam pointer-events-none fixed inset-0 z-[9995] overflow-hidden" aria-hidden>
+      <div className="ambient-scan-line" />
     </div>
   );
 }
@@ -155,10 +167,10 @@ export function StatusBar() {
 
   return (
     <div className="status-bar fixed inset-x-0 bottom-0 z-50 flex items-center justify-between border-t border-terminal bg-black/95 px-3 py-1 font-mono text-[9px] uppercase tracking-wider sm:px-6 sm:text-[10px]">
-      <span className="text-terminal">IPG://MAINNET</span>
+      <span className="text-terminal">{BRAND_SHORT.toUpperCase()}://PONS</span>
       <span className="hidden text-dim sm:inline">BLK::{block.toLocaleString()}</span>
       <span className="hidden text-[#00f0ff] sm:inline">NODES::271</span>
-      <span className="animate-pulse text-[#ff0080]">[GLITCH_ACTIVE]</span>
+      <span className="animate-pulse text-[#ff0080]">[GLIITCH_ACTIVE]</span>
       <span className="text-dim">{time} UTC</span>
     </div>
   );

@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { useUser } from "@/hooks/useUser";
-import { LAUNCH_TWEET_URL, OFFICIAL_X_FOLLOW_URL, xMention } from "@/lib/social/config";
+import { hasLaunchTweet, hasOfficialX, LAUNCH_TWEET_URL, OFFICIAL_X_FOLLOW_URL } from "@/lib/social/config";
 import type { Quest } from "@/types";
 
 type QuestGridProps = {
@@ -37,12 +37,17 @@ function QuestIcon({ icon }: { icon: string }) {
   }
 }
 
-const QUEST_LINKS: Record<string, { href: string; label: string } | undefined> = {
-  "follow-project": { href: OFFICIAL_X_FOLLOW_URL, label: "OPEN X" },
-  "retweet-launch": { href: LAUNCH_TWEET_URL, label: "VIEW PIN" },
-};
-
 const FOLLOW_INTENT_KEY = "ipg_follow_intent_at";
+
+function getQuestLink(questId: string): { href: string; label: string } | undefined {
+  if (questId === "follow-project" && hasOfficialX()) {
+    return { href: OFFICIAL_X_FOLLOW_URL, label: "OPEN X" };
+  }
+  if (questId === "retweet-launch" && hasLaunchTweet()) {
+    return { href: LAUNCH_TWEET_URL, label: "VIEW PIN" };
+  }
+  return undefined;
+}
 
 function markFollowIntent() {
   sessionStorage.setItem(FOLLOW_INTENT_KEY, String(Date.now()));
@@ -154,17 +159,21 @@ export function QuestGrid({ quests }: QuestGridProps) {
                     <span className="text-[10px] text-dim">VIA REFERRAL</span>
                   ) : (
                     <div className="flex flex-col items-end gap-1">
-                      {QUEST_LINKS[quest.id] && (
+                      {(() => {
+                        const questLink = getQuestLink(quest.id);
+                        if (!questLink) return null;
+                        return (
                         <a
-                          href={QUEST_LINKS[quest.id]!.href}
+                          href={questLink.href}
                           target="_blank"
                           rel="noopener noreferrer"
                           onClick={quest.id === "follow-project" ? markFollowIntent : undefined}
                           className="text-[9px] text-[#00f0ff] hover:underline"
                         >
-                          {QUEST_LINKS[quest.id]!.label}
+                          {questLink.label}
                         </a>
-                      )}
+                        );
+                      })()}
                       <button
                       type="button"
                       disabled={executing === quest.id}

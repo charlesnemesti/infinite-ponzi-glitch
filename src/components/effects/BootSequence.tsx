@@ -5,10 +5,10 @@ import { CorruptText } from "@/components/effects/GlitchEffects";
 import clsx from "clsx";
 
 const BOOT_LINES: { text: string; type?: "ok" | "warn" | "err" }[] = [
-  { text: "> BOOT::INFINITE_PONZI_GLITCH v0.9.9" },
-  { text: "> CHAIN::ROBINHOOD [4663]... OK", type: "ok" },
+  { text: "> BOOT::INFINITE_PONSI_GLIITCH v0.9.9" },
+  { text: "> PLATFORM::PONS............ OK", type: "ok" },
   { text: "> ATTENTION_FI.dll.......... OK", type: "ok" },
-  { text: "> WARN::PONZI_LOOP @ 0x7FFF", type: "warn" },
+  { text: "> WARN::PONSI_LOOP @ 0x7FFF", type: "warn" },
   { text: "> AIRDROP::30% SUPPLY LOCKED", type: "ok" },
   { text: "> ERR::STACK OVERFLOW — GO", type: "err" },
   { text: "> SYSTEM READY.", type: "ok" },
