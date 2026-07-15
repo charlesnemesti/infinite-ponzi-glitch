@@ -1,7 +1,8 @@
 "use client";
 
 import { Check, Copy, ExternalLink } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getCaRevealMs } from "@/lib/contest/config";
 import {
   hasTokenCa,
   TOKEN_CA,
@@ -15,10 +16,56 @@ type ContractAddressBarProps = {
   className?: string;
 };
 
+function useCaRevealed(): boolean {
+  const [revealed, setRevealed] = useState(false);
+
+  useEffect(() => {
+    const check = () => setRevealed(Date.now() >= getCaRevealMs());
+    check();
+    const id = setInterval(check, 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  return revealed;
+}
+
+function CaPendingBadge({ variant }: { variant: ContractAddressBarProps["variant"] }) {
+  const label = "Ready 2 min after launch";
+
+  if (variant === "navbar") {
+    return (
+      <span className="hidden border border-[#00f0ff]/40 bg-black/80 px-2 py-1 font-mono text-[10px] uppercase tracking-wider text-[#00f0ff] lg:inline-flex">
+        {label}
+      </span>
+    );
+  }
+
+  if (variant === "footer") {
+    return (
+      <div className="font-mono text-xs">
+        <p className="text-[10px] uppercase tracking-wider text-dim">{TOKEN_SYMBOL} :: CONTRACT</p>
+        <p className="mt-2 text-[11px] uppercase tracking-wider text-[#00f0ff]">{label}</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="inline-flex items-center justify-center border border-[#00f0ff]/40 bg-black/80 px-3 py-1.5 font-mono backdrop-blur-sm">
+      <span className="text-[10px] uppercase tracking-widest text-[#00f0ff] sm:text-xs">
+        {TOKEN_SYMBOL} :: {label}
+      </span>
+    </div>
+  );
+}
+
 export function ContractAddressBar({ variant = "hero", className = "" }: ContractAddressBarProps) {
   const [copied, setCopied] = useState(false);
+  const revealed = useCaRevealed();
+  const showCa = revealed && hasTokenCa();
 
-  if (!hasTokenCa()) return null;
+  if (!showCa) {
+    return <CaPendingBadge variant={variant} />;
+  }
 
   const copyCa = async () => {
     try {

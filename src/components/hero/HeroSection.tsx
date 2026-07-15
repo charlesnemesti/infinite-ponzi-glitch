@@ -11,7 +11,6 @@ import { GlitchText } from "@/components/effects/Terminal";
 import { BootSequence } from "@/components/effects/BootSequence";
 import { LiveFeedTicker } from "@/components/leaderboard/LiveFeedTicker";
 import { BrandLogo } from "@/components/brand/BrandLogo";
-import { hasTokenCa } from "@/lib/token/config";
 import { ContractAddressBar } from "@/components/token/ContractAddressBar";
 import { PonsLaunchLink } from "@/components/platform/PonsLaunchLink";
 
@@ -100,16 +99,14 @@ export function HeroSection() {
           </span>
         </motion.div>
 
-        {hasTokenCa() ? (
-          <motion.div
-            initial={{ opacity: 0, y: -4 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15 }}
-            className="mb-4 sm:mb-5"
-          >
-            <ContractAddressBar variant="hero" />
-          </motion.div>
-        ) : null}
+        <motion.div
+          initial={{ opacity: 0, y: -4 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+          className="mb-4 sm:mb-5"
+        >
+          <ContractAddressBar variant="hero" />
+        </motion.div>
 
         {/* Top 3 flanking — solo desktop */}
         <div className="mb-2 hidden w-full max-w-4xl items-center justify-between font-mono text-[10px] xl:flex">
