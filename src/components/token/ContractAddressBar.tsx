@@ -31,11 +31,12 @@ function useCaRevealed(): boolean {
 
 function CaPendingBadge({ variant }: { variant: ContractAddressBarProps["variant"] }) {
   const label = "Ready 2 min after launch";
+  const shortLabel = "CA · +2MIN";
 
   if (variant === "navbar") {
     return (
-      <span className="hidden border border-[#00f0ff]/40 bg-black/80 px-2 py-1 font-mono text-[10px] uppercase tracking-wider text-[#00f0ff] lg:inline-flex">
-        {label}
+      <span className="hidden whitespace-nowrap border border-[#00f0ff]/40 bg-black/80 px-2 py-1 font-mono text-[10px] uppercase tracking-wider text-[#00f0ff] 2xl:inline-flex">
+        {shortLabel}
       </span>
     );
   }

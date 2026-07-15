@@ -12,10 +12,10 @@ import { ContractAddressBar } from "@/components/token/ContractAddressBar";
 import { PonsLaunchLink } from "@/components/platform/PonsLaunchLink";
 
 const NAV_ITEMS = [
-  { label: "RANK_MATRIX", href: "#leaderboard" },
-  { label: "NODE_PROFILE", href: "#profile" },
-  { label: "QUEST_LOG", href: "#quests" },
-  { label: "REWARD_POOL", href: "#rewards" },
+  { label: "RANK", href: "#leaderboard" },
+  { label: "PROFILE", href: "#profile" },
+  { label: "QUESTS", href: "#quests" },
+  { label: "REWARDS", href: "#rewards" },
   { label: "DOCS", href: "#docs" },
 ];
 
@@ -24,37 +24,36 @@ export function Navbar() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-terminal bg-black/90 backdrop-blur-sm">
-      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6">
-        <Link href="/" className="group flex items-center gap-2 font-mono">
+      <div className="mx-auto flex h-14 max-w-7xl items-center gap-3 px-4 sm:px-6">
+        <Link href="/" className="group flex shrink-0 items-center gap-2 font-mono">
           <BrandLogo size="sm" priority className="transition-opacity group-hover:opacity-90" />
-          <span className="hidden text-sm font-bold uppercase tracking-wider text-terminal group-hover:text-[#00f0ff] transition-colors sm:block">
+          <span className="hidden max-w-[8rem] truncate text-xs font-bold uppercase tracking-wider text-terminal transition-colors group-hover:text-[#00f0ff] 2xl:block 2xl:max-w-none 2xl:text-sm">
             {BRAND_NAME}
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-6 md:flex">
+        <nav className="hidden min-w-0 flex-1 items-center justify-center gap-4 xl:flex 2xl:gap-6">
           {NAV_ITEMS.map((item) => (
             <a
               key={item.href}
               href={item.href}
-              className="font-mono text-xs uppercase tracking-wider text-dim transition-colors hover:text-terminal"
+              className="whitespace-nowrap font-mono text-[10px] uppercase tracking-wider text-dim transition-colors hover:text-terminal 2xl:text-xs"
             >
               {">"} {item.label}
             </a>
           ))}
         </nav>
 
-        <div className="hidden items-center gap-2 lg:gap-3 md:flex">
-          <ContractAddressBar variant="navbar" />
+        <div className="hidden shrink-0 items-center gap-2 xl:flex">
           <PonsLaunchLink variant="compact" />
-          <SocialLinks compact />
+          <SocialLinks compact iconOnly />
           <TwitterConnect compact />
           <MetaMaskConnect compact />
         </div>
 
         <button
           type="button"
-          className="p-2 text-terminal md:hidden"
+          className="ml-auto shrink-0 p-2 text-terminal xl:hidden"
           onClick={() => setOpen((v) => !v)}
           aria-label="Toggle menu"
         >
@@ -63,7 +62,7 @@ export function Navbar() {
       </div>
 
       {open && (
-        <div className="border-t border-terminal bg-black px-4 py-4 md:hidden">
+        <div className="border-t border-terminal bg-black px-4 py-4 xl:hidden">
           <nav className="flex flex-col gap-3 font-mono text-xs uppercase">
             {NAV_ITEMS.map((item) => (
               <a
@@ -75,7 +74,7 @@ export function Navbar() {
                 {">"} {item.label}
               </a>
             ))}
-            <div className="mt-2 flex flex-col gap-2 border-t border-terminal pt-4">
+            <div className="mt-2 flex flex-col gap-3 border-t border-terminal pt-4">
               <ContractAddressBar variant="hero" />
               <PonsLaunchLink />
               <SocialLinks />
