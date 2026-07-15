@@ -33,18 +33,18 @@ export const metadata: Metadata = {
     description: ">> SYSTEM BREACH :: ATTENTION_FI MODULE ACTIVE ON PONS",
     images: [
       {
-        url: "/banner-twitter.png",
-        width: 1500,
-        height: 500,
-        alt: `${BRAND_NAME} — AttentionFi on Pons`,
+        url: "/logo.png",
+        width: 1024,
+        height: 1024,
+        alt: `${BRAND_NAME} logo`,
       },
     ],
   },
   twitter: {
-    card: "summary_large_image",
+    card: "summary",
     title: BRAND_NAME,
     description: ">> SYSTEM BREACH :: ATTENTION_FI MODULE ACTIVE ON PONS",
-    images: ["/banner-twitter.png"],
+    images: ["/logo.png"],
   },
 };
 
