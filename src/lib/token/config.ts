@@ -2,7 +2,9 @@ import { robinhoodChain } from "@/lib/chains/robinhood";
 import { BRAND_SHORT } from "@/lib/brand/config";
 
 /** Token contract — set via NEXT_PUBLIC_TOKEN_CA when live */
-export const TOKEN_CA = process.env.NEXT_PUBLIC_TOKEN_CA?.trim() ?? "";
+export const TOKEN_CA =
+  process.env.NEXT_PUBLIC_TOKEN_CA?.trim() ||
+  "0xb5a3daada37e689a2687db13a39cf89792926ed5";
 
 export const TOKEN_SYMBOL = process.env.NEXT_PUBLIC_TOKEN_SYMBOL?.trim() || BRAND_SHORT;
 
