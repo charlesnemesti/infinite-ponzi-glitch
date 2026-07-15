@@ -141,6 +141,7 @@ export async function verifyTwitterCredentials(): Promise<{
     body: new URLSearchParams({
       grant_type: "client_credentials",
       client_id: clientId,
+      client_secret: clientSecret,
       scope: "users.read",
     }),
   });
