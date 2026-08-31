@@ -131,7 +131,7 @@ export function HeroSection() {
           </GlitchText>
           <br />
           <GlitchText as="span" className="hero-glitch text-[#ff0080]">
-            PONSI
+            PONZI
           </GlitchText>
           <span className="text-dim">_</span>
           <GlitchText as="span" className="hero-glitch text-[#00f0ff]">

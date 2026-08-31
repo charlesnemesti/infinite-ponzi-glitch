@@ -97,7 +97,7 @@ export function BombCountdown() {
             <Row label="MISSION" value="stack XP · climb rank · post on X" />
             <p className="pt-1 text-dim">
               The degen legion is live.{" "}
-              <span className="text-terminal">IPG</span> is the onchain Ponsi movement — inject or
+              <span className="text-terminal">IPG</span> is the onchain Ponzi movement — inject or
               get left behind.
             </p>
           </>
@@ -112,7 +112,7 @@ export function BombCountdown() {
               </li>
               <li>
                 <span className="text-[#ffff00]">{">"}</span>{" "}
-                <span className="text-terminal">IPG</span> becomes the Ponsi wave onchain
+                <span className="text-terminal">IPG</span> becomes the Ponzi wave onchain
               </li>
               <li>
                 <span className="text-[#ffff00]">{">"}</span> Climb rank — taxes split to top 10 every UTC day

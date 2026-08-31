@@ -75,7 +75,7 @@ export function ScreenTear() {
 
 const FLOAT_LINES = [
   "0xDEADBEEF",
-  "PONSI_LOOP++",
+  "PONZI_LOOP++",
   "GLIITCH.exe",
   "STACK_OVERFLOW",
   "malloc(∞)",

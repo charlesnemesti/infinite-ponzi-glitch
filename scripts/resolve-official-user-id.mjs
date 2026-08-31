@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Resolve @InfPonsiGlitch numeric user ID for TWITTER_OFFICIAL_USER_ID.
+ * Resolve @IPG_Robinhood numeric user ID for TWITTER_OFFICIAL_USER_ID.
  * Usage: npm run resolve:official-id
  */
 import { readFileSync, existsSync } from "fs";
@@ -24,7 +24,7 @@ loadEnvLocal();
 
 const clientId = process.env.TWITTER_CLIENT_ID?.trim();
 const clientSecret = process.env.TWITTER_CLIENT_SECRET?.trim();
-const handle = process.env.NEXT_PUBLIC_OFFICIAL_X_HANDLE?.trim() || "InfPonsiGlitch";
+const handle = process.env.NEXT_PUBLIC_OFFICIAL_X_HANDLE?.trim() || "IPG_Robinhood";
 
 const launchTweetId = process.env.TWITTER_LAUNCH_TWEET_ID?.trim();
 

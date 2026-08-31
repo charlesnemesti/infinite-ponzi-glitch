@@ -1,10 +1,9 @@
-/** Official project X — https://x.com/InfPonsiGlitch */
+/** Official project X — https://x.com/IPG_Robinhood */
 export const OFFICIAL_X_HANDLE =
-  process.env.NEXT_PUBLIC_OFFICIAL_X_HANDLE?.trim() || "InfPonsiGlitch";
+  process.env.NEXT_PUBLIC_OFFICIAL_X_HANDLE?.trim() || "IPG_Robinhood";
 
-/** Numeric user ID for @InfPonsiGlitch (follow quest verification) */
-export const OFFICIAL_X_USER_ID =
-  process.env.TWITTER_OFFICIAL_USER_ID?.trim() || "2077399136232439808";
+/** Numeric user ID for @IPG_Robinhood (follow quest verification) */
+export const OFFICIAL_X_USER_ID = process.env.TWITTER_OFFICIAL_USER_ID?.trim() || "";
 
 export function hasOfficialX(): boolean {
   return Boolean(OFFICIAL_X_HANDLE);

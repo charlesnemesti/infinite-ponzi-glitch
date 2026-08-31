@@ -44,7 +44,7 @@ Sin Supabase, la app usa almacenamiento in-memory con usuarios demo.
 | `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` | WalletConnect Cloud |
 | `TWITTER_CLIENT_ID` / `TWITTER_CLIENT_SECRET` | X Developer Portal |
 | `TWITTER_CALLBACK_URL` | `http://localhost:3000/api/auth/twitter/callback` |
-| `TWITTER_OFFICIAL_USER_ID` | User ID de @infinite_ponzi_glitch |
+| `TWITTER_OFFICIAL_USER_ID` | User ID de @IPG_Robinhood |
 | `TWITTER_LAUNCH_TWEET_ID` | Tweet ID del pin de launch (quest retweet) |
 | `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL |
 | `SUPABASE_SERVICE_ROLE_KEY` | Supabase service role key |
