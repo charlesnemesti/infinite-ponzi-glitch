@@ -7,6 +7,7 @@ import {
   SEASON_STATS,
 } from "@/lib/data/mock-leaderboard";
 import { TOKENOMICS_TAGLINE } from "@/lib/tokenomics/config";
+import { DEMO_DATA_NOTICE } from "@/lib/contest/config";
 import type { LeaderboardEntry } from "@/types";
 import { GlitchText } from "@/components/effects/Terminal";
 import { BootSequence } from "@/components/effects/BootSequence";
@@ -197,7 +198,10 @@ export function HeroSection() {
               <AnimatedNumber value={SEASON_STATS.totalPosters} />
             </p>
             <p className="mt-2 font-mono text-[10px] text-dim sm:text-xs">
-              posters competing · season_01
+              posters competing · season_01 · demo stats
+            </p>
+            <p className="mx-auto mt-3 max-w-lg text-[9px] leading-relaxed text-[#ffff00]/80 sm:text-[10px]">
+              {DEMO_DATA_NOTICE}
             </p>
             <div className="mt-4 flex justify-center gap-6 font-mono text-[10px] sm:gap-10 sm:text-xs">
               <span>

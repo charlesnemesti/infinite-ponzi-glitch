@@ -1,7 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { CONTEST_START_UTC_LABEL, getContestStartMs } from "@/lib/contest/config";
+import {
+  CONTEST_START_UTC_LABEL,
+  getContestStartMs,
+  isContestLive,
+} from "@/lib/contest/config";
 
 type TimeLeft = { hours: number; minutes: number; seconds: number; total: number };
 
@@ -19,6 +23,7 @@ function pad(n: number) {
 
 export function BombCountdown() {
   const targetMs = getContestStartMs();
+  const manuallyLive = isContestLive();
   const [left, setLeft] = useState<TimeLeft>(() => calcTimeLeft(targetMs));
   const [mounted, setMounted] = useState(false);
 
@@ -30,8 +35,10 @@ export function BombCountdown() {
     return () => clearInterval(id);
   }, [targetMs]);
 
-  const live = left.total <= 0;
-  const critical = !live && left.total <= 5 * 60_000;
+  const countdownZero = left.total <= 0;
+  const armed = !countdownZero && !manuallyLive;
+  const awaitingGo = countdownZero && !manuallyLive;
+  const critical = armed && left.total <= 5 * 60_000;
 
   if (!mounted) {
     return (
@@ -42,11 +49,13 @@ export function BombCountdown() {
   return (
     <div
       className={`bomb-countdown relative mb-6 overflow-hidden border font-mono ${
-        live
+        manuallyLive
           ? "border-terminal bg-terminal/10"
-          : critical
-            ? "border-[#ff0080] bg-[#ff0080]/10 bomb-shake"
-            : "border-[#ffff00]/50 bg-[#1a0a00]/90"
+          : awaitingGo
+            ? "border-[#ff0080] bg-[#ff0080]/10"
+            : critical
+              ? "border-[#ff0080] bg-[#ff0080]/10 bomb-shake"
+              : "border-[#ffff00]/50 bg-[#1a0a00]/90"
       }`}
     >
       <div className="bomb-scanline pointer-events-none absolute inset-0" aria-hidden />
@@ -55,18 +64,39 @@ export function BombCountdown() {
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <p className="text-[10px] uppercase tracking-[0.3em] text-[#ff0080] sm:text-xs">
-              {live ? "☢ CONTEST_LIVE" : "☢ CONTEST_ARMED"}
+              {manuallyLive
+                ? "☢ CONTEST_LIVE"
+                : awaitingGo
+                  ? "☢ COUNTDOWN_ZERO"
+                  : "☢ CONTEST_ARMED"}
             </p>
             <p className="mt-1 text-[10px] uppercase tracking-wider text-dim">
-              {live ? "detonation complete · rank matrix unlocked" : "t-minus to go-live"}
+              {manuallyLive
+                ? "real contest active · rank matrix unlocked"
+                : awaitingGo
+                  ? "timer at zero · awaiting manual go-live"
+                  : "t-minus to zero · demo data below"}
             </p>
           </div>
 
           <div className="text-right">
-            {live ? (
+            {manuallyLive ? (
               <div className="bomb-digits-live text-3xl font-bold tracking-widest text-terminal sm:text-4xl">
-                [GO]
+                [LIVE]
               </div>
+            ) : awaitingGo ? (
+              <>
+                <div className="bomb-digits inline-flex gap-1 text-3xl font-bold tabular-nums text-[#ff0080] sm:text-4xl">
+                  <span>00</span>
+                  <span className="bomb-colon">:</span>
+                  <span>00</span>
+                  <span className="bomb-colon">:</span>
+                  <span>00</span>
+                </div>
+                <p className="mt-1 text-[9px] uppercase tracking-wider text-dim">
+                  zero reached · ops activates manually
+                </p>
+              </>
             ) : (
               <>
                 <div
@@ -90,9 +120,9 @@ export function BombCountdown() {
       </div>
 
       <div className="relative space-y-2 px-4 py-3 text-[10px] leading-relaxed sm:px-6 sm:text-xs">
-        {live ? (
+        {manuallyLive ? (
           <>
-            <Row label="STATUS" value="contest active" accent />
+            <Row label="STATUS" value="contest active · real data" accent />
             <Row label="PAYOUT" value="99% daily taxes → top 10" />
             <Row label="MISSION" value="stack XP · climb rank · post on X" />
             <p className="pt-1 text-dim">
@@ -101,14 +131,29 @@ export function BombCountdown() {
               get left behind.
             </p>
           </>
+        ) : awaitingGo ? (
+          <>
+            <Row label="STATUS" value="countdown zero · not live yet" accent />
+            <Row label="DATA" value="still demo until ops flips live switch" />
+            <Row label="NEXT" value="ops flips the live switch · watch X" />
+            <p className="pt-1 text-dim">
+              The timer hit zero. The team activates the real rank matrix, quests, and payouts
+              manually — watch X for the official go signal. This page stays in demo mode until
+              then.
+            </p>
+          </>
         ) : (
           <>
-            <Row label="NOW" value="preview mode · simulated ranks only" />
-            <Row label="AT GO" value={`${CONTEST_START_UTC_LABEL} · real contest unlocks`} accent />
-            <Row label="PAYOUT" value="99% daily taxes → top 10 rank" />
+            <Row label="DATA" value="demo only · simulated ranks & live feed" accent />
+            <Row label="AT ZERO" value="real contest activated manually by ops" />
+            <Row label="TARGET" value={`${CONTEST_START_UTC_LABEL} · countdown detonation`} />
+            <p className="pt-1 text-dim">
+              Everything below — leaderboard, stats, quest board — is preview data. When this timer
+              reaches zero, the real contest is switched on manually (not automatic).
+            </p>
             <ul className="space-y-1 pt-1 text-dim">
               <li>
-                <span className="text-[#ffff00]">{">"}</span> Degen legion deploys on X
+                <span className="text-[#ffff00]">{">"}</span> Degen legion deploys on X at go-live
               </li>
               <li>
                 <span className="text-[#ffff00]">{">"}</span>{" "}

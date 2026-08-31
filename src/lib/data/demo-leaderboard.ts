@@ -1,8 +1,9 @@
 import type { LeaderboardEntry } from "@/types";
 import { xMention } from "@/lib/social/config";
 
-export const DEMO_DISCLAIMER =
-  "DEMO_DATA — Simulated rank feed for preview only. Real contest starts at $GLITCH TGE on Robinhood Chain mainnet [4663].";
+import { DEMO_DATA_NOTICE } from "@/lib/contest/config";
+
+export const DEMO_DISCLAIMER = DEMO_DATA_NOTICE;
 
 export const DEMO_LEADERBOARD: LeaderboardEntry[] = [
   {

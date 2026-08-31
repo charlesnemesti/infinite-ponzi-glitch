@@ -10,6 +10,7 @@ import { RankEventToast } from "@/components/leaderboard/RankEventToast";
 import { useLiveLeaderboard } from "@/hooks/useLiveLeaderboard";
 import { useUser } from "@/hooks/useUser";
 import { BombCountdown } from "@/components/contest/BombCountdown";
+import { DEMO_DATA_NOTICE } from "@/lib/contest/config";
 
 const FILTERS = ["24H", "7D", "30D", "ALL"] as const;
 
@@ -55,8 +56,17 @@ export function Leaderboard() {
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#ff0080] opacity-75" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-[#ff0080]" />
             </span>
-            <span className="text-[#ff0080]">live_sync // demo_feed</span>
+            <span className="text-[#ff0080]">demo_feed // not live data</span>
           </motion.div>
+
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={inView ? { opacity: 1 } : {}}
+            transition={{ delay: 0.15 }}
+            className="mx-auto mt-3 max-w-2xl border border-[#ffff00]/30 bg-[#ffff00]/5 px-4 py-3 text-left font-mono text-[10px] leading-relaxed text-[#ffff00]/90 sm:text-xs"
+          >
+            {DEMO_DATA_NOTICE}
+          </motion.p>
 
           <motion.h2
             initial={{ opacity: 0, y: 16 }}

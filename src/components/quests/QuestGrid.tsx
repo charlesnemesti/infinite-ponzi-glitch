@@ -13,6 +13,7 @@ import {
 import { useState } from "react";
 import { useUser } from "@/hooks/useUser";
 import { hasLaunchTweet, hasOfficialX, LAUNCH_TWEET_URL, OFFICIAL_X_FOLLOW_URL } from "@/lib/social/config";
+import { DEMO_DATA_NOTICE } from "@/lib/contest/config";
 import type { Quest } from "@/types";
 
 type QuestGridProps = {
@@ -102,7 +103,10 @@ export function QuestGrid({ quests }: QuestGridProps) {
             INJECT // EARN // REPEAT
           </h2>
           <p className="mt-2 max-w-2xl text-xs text-dim">
-            {">"} Execute missions for real XP. Wallet + X required for social exploits.
+            {">"} Execute missions for real XP once the contest is live. Wallet + X required for social exploits.
+          </p>
+          <p className="mt-2 max-w-2xl border border-[#ffff00]/25 bg-[#ffff00]/5 px-3 py-2 text-[10px] leading-relaxed text-[#ffff00]/85 sm:text-xs">
+            {DEMO_DATA_NOTICE}
           </p>
         </div>
 
