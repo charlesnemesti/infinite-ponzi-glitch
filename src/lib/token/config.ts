@@ -4,7 +4,7 @@ import { BRAND_SHORT } from "@/lib/brand/config";
 /** Token contract — set via NEXT_PUBLIC_TOKEN_CA when live */
 export const TOKEN_CA =
   process.env.NEXT_PUBLIC_TOKEN_CA?.trim() ||
-  "0xb5a3daada37e689a2687db13a39cf89792926ed5";
+  "0xccec70b160c7b01a7497933fce9b2f4be99fbab3";
 
 export const TOKEN_SYMBOL = process.env.NEXT_PUBLIC_TOKEN_SYMBOL?.trim() || BRAND_SHORT;
 
